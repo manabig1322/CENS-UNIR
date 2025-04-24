@@ -1,23 +1,26 @@
 import pandas as pd
 import re
 import unicodedata
+import numpy as np
 
-
-#funcion que limpia los textos de cualquier caracter especial que puede provoca errores
+#funcion que valida si hay coma en la cadena
+def contiene_coma(cadena):
+    return ',' in cadena
 def limpiar_texto(texto):
-    if isinstance(texto, str):
-        # Eliminar saltos de línea y caracteres especiales al inicio y al final
-        texto = re.sub(r'^[^\w\s]+|[^\w\s]+$|^[ \n\r\t]+|[ \n\r\t]+$', '', texto)
-        return texto
-    return texto  # Retorna el valor original si no es una cadena
+   
+   
+    # Reemplazar múltiples espacios por uno solo
+    texto = re.sub(r'[0-9.]', '',texto)
+    return texto.strip()
+
 #funcion que quita los numeros y puntos
-def limpiar_numero_punto(texto):
+def limpiar_columna_numeros(df,columna):
     
-    if isinstance(texto, str):
-        # Eliminar saltos de línea y caracteres especiales al inicio y al final
-        texto = re.sub(r'[0-9.]', '', texto)
-        return texto
-    return texto  # Retorna el valor original si no es una cadena
+    if columna not in df.columns:
+        return df
+    # Limpiar dejando solo dígitos (y opcionalmente punto decimal)
+    df[columna] = df[columna].astype(str).apply(limpiar_texto)
+    return df
 #funcion que quitas los campos que tiene minusculas
 def QuitarFilaConMinusculas(df, columna):
     # Filtrar el DataFrame para mantener solo las filas donde 'columna1' está en mayúsculas
@@ -34,6 +37,22 @@ def ReemplazarValorDataSet(datset, Nobrecolumna, ValorBusar, ValorReemplazar):
     datset[Nobrecolumna] = datset[Nobrecolumna].replace(ValorBusar, ValorReemplazar) # reemplaza el valor para unificar data
     return datset
 # Función para quitar acentos
+def quitar_acentos_columna(df, columna):
+    if columna not in df.columns:
+        return df
+    
+    # Función auxiliar para quitar acentos
+    def quitar_acentos(texto):
+        if isinstance(texto, str):
+            return ''.join(
+                c for c in unicodedata.normalize('NFKD', texto)
+                if not unicodedata.combining(c)
+            )
+        return texto  # Si no es string, lo devuelve igual
+
+    # Aplicar a la columna
+    df[columna] = df[columna].apply(quitar_acentos)
+    return df
 def quitar_acentos(texto):
     if isinstance(texto, str):
         texto_normalizado = unicodedata.normalize('NFD', texto)
@@ -57,7 +76,6 @@ def CalcularPromedioDimension(DataSet, columnaValor, Año, tipoExcel):
 def CalculosPromediosComponenteDataSet(DataSet, ColumnaValor, Año, tipoExcel):
     
     # 1. Convertir 'valor' a numérico, forzando ignorar los valores no numericas
-
     DataSet[ColumnaValor] = pd.to_numeric(DataSet[ColumnaValor], errors='coerce')
     # 2. Promedia el resultados por persona componeten y dimension
     promedio_dimension_componente = DataSet.groupby(['Dimension','Subdimension', 'Persona'])[ColumnaValor].mean().reset_index()
@@ -121,6 +139,45 @@ def AgregarComponenteFaltantes(df1, df2,columnaDimension, columnaComponente, Col
               
     #regresando el dataset actualizado con los componentes faltante agregados
     return df2
+def AgregarConteoPreguntasSeleccionMultiple(df1, df2,columnaDimension, columnaComponente,ColumnaPregunta,ColumnaTipoPregunta, ColumnaValor):
+      # Obtener listado único de Dimension
+    listadoDimensionDataSetPreguntas = set(df1[columnaDimension].dropna().unique())
+
+    for valDimension in listadoDimensionDataSetPreguntas:
+      
+        # Obtener listado único de Componente
+       listadoComponenteDataSetRespuesta = df2[df2[columnaDimension] == valDimension.strip()][columnaComponente].dropna().unique()
+
+       for valComponente in listadoComponenteDataSetRespuesta:
+           
+           ListadoPreguntas = df2[(df2[columnaDimension] == valDimension &
+                                 df2[columnaComponente] == valComponente &
+                                 df2[ColumnaTipoPregunta] == "Opcion unica")][columnaDimension,columnaComponente,ColumnaPregunta,ColumnaValor]
+           
+           # Separar por líneas
+           filas = ListadoPreguntas[ColumnaValor].values[0]
+
+           if(contiene_coma(filas)):
+                # Dividir cada línea por comas
+            datos = [fila.split(',') for fila in filas]
+
+                # Determinar el número máximo de columnas
+            max_cols = max(len(fila) for fila in datos)
+
+                # Rellenar con None o np.nan para que todas tengan igual longitud
+            datos_uniformes = [fila + [np.nan]*(max_cols - len(fila)) for fila in datos]
+
+                # Crear el DataFrame
+            df = pd.DataFrame(datos_uniformes)
+
+                # Opcional: nombrar columnas como 'repuesta1', 'repuesta2', etc.
+            df.columns = [f'repuesta{i+1}' for i in range(max_cols)]
+            df[columnaDimension] = valDimension
+            df[columnaComponente] = valComponente
+            df[ColumnaPregunta] = ListadoPreguntas[ColumnaPregunta].values[0]
+            print(df.to_string())
+           
+
 #funcion Principal que inicia el programa
 def main():
     
@@ -131,33 +188,48 @@ def main():
     df_2025PreguntasDirectivo =  pd.read_excel('encuesta_diagnóstico_alternativa_directivos_general_090425.xlsx',sheet_name="Hoja1",header=0)
     df_2025PreguntasMiembro = pd.read_excel('encuesta_diagnóstico_alternativa_miembros_general_090425.xlsx',sheet_name="Hoja1",header=1)
 
-    #renombrando las columnas para unificar nombres
-    df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.rename(columns={'Componente': 'Subdimension'})
-    df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Componente': 'Subdimension'})
 
-    #quitando cualquier caracter especial que pueda provocar errors en el dataset
-    df_2025Miembros = df_2025Miembros.applymap(limpiar_texto)
-    df_2025Directivos = df_2025Directivos.applymap(limpiar_texto)
-    df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.applymap(limpiar_texto)
-    df_2025PreguntasMiembro = df_2025PreguntasMiembro.applymap(limpiar_texto)
-
-    #quitando acentos en los dataset
-    df_2025Miembros = df_2025Miembros.applymap(quitar_acentos)
-    df_2025Directivos = df_2025Directivos.applymap(quitar_acentos)
-    df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.applymap(quitar_acentos)
-    df_2025PreguntasMiembro = df_2025PreguntasMiembro.applymap(quitar_acentos)
-
-    #quitando los numeros y puntos
-    df_2025Miembros = df_2025Miembros.applymap(limpiar_numero_punto)
-    df_2025Directivos = df_2025Directivos.applymap(limpiar_numero_punto)
-    df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.applymap(limpiar_numero_punto)
-    df_2025PreguntasMiembro = df_2025PreguntasMiembro.applymap(limpiar_numero_punto)
-
-    #Quitando los espacios en blanco y quitando acentos de los nombres de las columnas
+    
     df_2025Directivos = QuitarEspaciosCeldasAcentosColumnas(df_2025Directivos)
     df_2025Miembros = QuitarEspaciosCeldasAcentosColumnas(df_2025Miembros)
     df_2025PreguntasDirectivo = QuitarEspaciosCeldasAcentosColumnas(df_2025PreguntasDirectivo)
     df_2025PreguntasMiembro = QuitarEspaciosCeldasAcentosColumnas(df_2025PreguntasMiembro)
+
+    #renombrando las columnas para unificar nombres
+    df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.rename(columns={'Componente': 'Subdimension'})
+    df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Componente': 'Subdimension'})
+
+
+    #Quitando los espacios en blanco y quitando acentos de los nombres de las columnas
+    df_2025Directivos =quitar_acentos_columna(df_2025Miembros,"Dimension")
+    df_2025Miembros =quitar_acentos_columna(df_2025Miembros,"Dimension")
+    df_2025PreguntasDirectivo =quitar_acentos_columna(df_2025PreguntasDirectivo,"Dimension")
+    df_2025PreguntasMiembro =quitar_acentos_columna(df_2025PreguntasMiembro,"Dimension")
+    
+    df_2025Directivos =quitar_acentos_columna(df_2025Miembros,"Subdimension")
+    df_2025Miembros =quitar_acentos_columna(df_2025Miembros,"Subdimension")
+    df_2025PreguntasDirectivo =quitar_acentos_columna(df_2025PreguntasDirectivo,"Subdimension")
+    df_2025PreguntasMiembro =quitar_acentos_columna(df_2025PreguntasMiembro,"Subdimension")
+
+    df_2025Directivos =quitar_acentos_columna(df_2025Miembros,"TipoPregunta")
+    df_2025Miembros =quitar_acentos_columna(df_2025Miembros,"TipoPregunta")
+    df_2025PreguntasDirectivo =quitar_acentos_columna(df_2025PreguntasDirectivo,"TipoPregunta")
+    df_2025PreguntasMiembro =quitar_acentos_columna(df_2025PreguntasMiembro,"TipoPregunta")
+
+    
+    #quitando los numeros y puntos
+    df_2025Miembros = limpiar_columna_numeros(df_2025Miembros,"Dimension")
+    df_2025Directivos = limpiar_columna_numeros(df_2025Directivos,"Dimension")
+    df_2025PreguntasDirectivo = limpiar_columna_numeros(df_2025PreguntasDirectivo,"Dimension")
+    df_2025PreguntasMiembro = limpiar_columna_numeros(df_2025PreguntasMiembro,"Dimension")
+    
+    df_2025Miembros = limpiar_columna_numeros(df_2025Miembros,"Subdimension")
+    df_2025Directivos = limpiar_columna_numeros(df_2025Directivos,"Subdimension")
+    df_2025PreguntasDirectivo = limpiar_columna_numeros(df_2025PreguntasDirectivo,"Subdimension")
+    df_2025PreguntasMiembro = limpiar_columna_numeros(df_2025PreguntasMiembro,"Subdimension")
+    
+
+   
 
 
     # quitando filas en Minusculas
@@ -210,6 +282,10 @@ def main():
     df_2025Directivos = AgregarComponenteFaltantes(df_2025PreguntasDirectivo, df_2025Directivos,"Dimension","Subdimension","Valor")
     df_2025Miembros = AgregarComponenteFaltantes(df_2025PreguntasMiembro, df_2025Miembros,"Dimension","Subdimension","Valor")
 
+    df_ListadoPreguntasEstructuradaDirector2025 = AgregarConteoPreguntasSeleccionMultiple(df_2025PreguntasDirectivo, df_2025Directivos,"Dimension","Subdimension","Pregunta","TipoPregunta","Valor")
+
+    df_2025DirectivosImpresion = df_2025Directivos.copy()
+    df_2025MiembrosImpresion = df_2025Miembros.copy()
 
     #calculos de los promedios por dimension
     ResultadoDimensionesDirectivo2025=CalcularPromedioDimension(df_2025Directivos
@@ -234,12 +310,13 @@ def main():
 
 
     with pd.ExcelWriter('Respuestas.xlsx', engine='openpyxl') as writer:
-        df_2025Miembros.to_excel(writer, sheet_name='Miembros', index=False)
-        df_2025Directivos.to_excel(writer, sheet_name='Directivos', index=False)
+        df_2025MiembrosImpresion.to_excel(writer, sheet_name='Miembros', index=False)
+        df_2025DirectivosImpresion.to_excel(writer, sheet_name='Directivos', index=False)
         ResultadoDimensionesDirectivo2025.to_excel(writer, sheet_name='PromedioDirectivosDimension', index=False)
         ResultadoDimensionesMiembro2025.to_excel(writer, sheet_name='PromedioMiembroDimension', index=False)
         promedio_dimension_directivo.to_excel(writer, sheet_name='PromedioDirectivoComponente', index=False)
         promedio_dimension_Miembro.to_excel(writer, sheet_name='PromedioMiembroComponente', index=False)
+        df_ListadoPreguntasEstructuradaDirector2025.to_excel(writer, sheet_name='ListadoPreguntasEstructuradaDirector2025', index=False)
     print("fin de ejecucion")
 
 
