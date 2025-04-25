@@ -2,9 +2,12 @@ import pandas as pd
 import re
 import unicodedata
 import numpy as np
+import matplotlib.pyplot as plt
 
 #funcion que valida si hay coma en la cadena
 def contiene_coma(cadena):
+    if pd.isna(cadena):
+        return False
     return ',' in cadena
 def limpiar_texto(texto):
    
@@ -59,6 +62,15 @@ def quitar_acentos(texto):
         texto_sin_acentos = re.sub(r'[\u0300-\u036f]', '', texto_normalizado)
         return texto_sin_acentos
     return texto
+# Función para procesar con máximo como parámetro
+def procesar_fila(entrada, maximo):
+    if pd.isna(entrada):
+        return []
+    if isinstance(entrada, int):
+        return [entrada] if 1 <= entrada <= maximo else []
+    if isinstance(entrada, str):
+        return sorted([int(x) for x in entrada.split(',') if x.isdigit() and 1 <= int(x) <= maximo])
+    return []
 # funcion que calcula el promedio de dimension por componente y persona y despues por dimension
 def CalcularPromedioDimension(DataSet, columnaValor, Año, tipoExcel):
     # 1. Convertir 'valor' a numérico, forzando ignorar los valores no numericas
@@ -139,43 +151,123 @@ def AgregarComponenteFaltantes(df1, df2,columnaDimension, columnaComponente, Col
               
     #regresando el dataset actualizado con los componentes faltante agregados
     return df2
-def AgregarConteoPreguntasSeleccionMultiple(df1, df2,columnaDimension, columnaComponente,ColumnaPregunta,ColumnaTipoPregunta, ColumnaValor):
-      # Obtener listado único de Dimension
-    listadoDimensionDataSetPreguntas = set(df1[columnaDimension].dropna().unique())
-
-    for valDimension in listadoDimensionDataSetPreguntas:
+def AgregarConteoPreguntasSeleccionMultiple(df2,columnaDimension, columnaComponente,ColumnaPregunta,ColumnaTipoPregunta, ColumnaValor):
       
-        # Obtener listado único de Componente
-       listadoComponenteDataSetRespuesta = df2[df2[columnaDimension] == valDimension.strip()][columnaComponente].dropna().unique()
+    # Obtener listado único de Dimension
+   
+    ListadoPreguntas = df2[(df2[ColumnaTipoPregunta] == "Seleccion multiple con texto")
+                                ][[columnaDimension
+                                   ,columnaComponente
+                                   ,ColumnaPregunta
+                                   ,ColumnaValor]]
 
-       for valComponente in listadoComponenteDataSetRespuesta:
-           
-           ListadoPreguntas = df2[(df2[columnaDimension] == valDimension &
-                                 df2[columnaComponente] == valComponente &
-                                 df2[ColumnaTipoPregunta] == "Opcion unica")][columnaDimension,columnaComponente,ColumnaPregunta,ColumnaValor]
+   
            
            # Separar por líneas
-           filas = ListadoPreguntas[ColumnaValor].values[0]
+    ListaRespuesta = ListadoPreguntas[ColumnaValor].dropna().tolist()
+  # Extraer todos los números válidos para encontrar el máximo
+    todos_los_numeros = []
 
-           if(contiene_coma(filas)):
-                # Dividir cada línea por comas
-            datos = [fila.split(',') for fila in filas]
+    for item in ListaRespuesta:
+        if isinstance(item, int):
+            todos_los_numeros.append(item)
+        elif isinstance(item, str):
+            numeros = [int(x) for x in item.split(',') if x.isdigit()]
+            todos_los_numeros.extend(numeros)
 
-                # Determinar el número máximo de columnas
-            max_cols = max(len(fila) for fila in datos)
+    # Detectar el número más alto
+    valor_maximo = max(todos_los_numeros)
 
-                # Rellenar con None o np.nan para que todas tengan igual longitud
-            datos_uniformes = [fila + [np.nan]*(max_cols - len(fila)) for fila in datos]
+    # Procesar las filas con el valor máximo detectado
+    filas_procesadas = [procesar_fila(x, valor_maximo) for x in ListaRespuesta]
 
-                # Crear el DataFrame
-            df = pd.DataFrame(datos_uniformes)
+    # Crear columnas dinámicas del 1 al valor máximo encontrado
+    columnas = [f'col{i}' for i in range(1, valor_maximo + 1)]
 
-                # Opcional: nombrar columnas como 'repuesta1', 'repuesta2', etc.
-            df.columns = [f'repuesta{i+1}' for i in range(max_cols)]
-            df[columnaDimension] = valDimension
-            df[columnaComponente] = valComponente
-            df[ColumnaPregunta] = ListadoPreguntas[ColumnaPregunta].values[0]
-            print(df.to_string())
+    # Construir el DataFrame
+    df_final = pd.DataFrame(columns=columnas)
+
+    for fila in filas_procesadas:
+        nueva_fila = {f'col{i}': (i if i in fila else np.nan) for i in range(1, valor_maximo + 1)}
+        df_final = pd.concat([df_final, pd.DataFrame([nueva_fila])], ignore_index=True)
+
+    # Agregar las columnas adicionales
+    df_final['dimension'] = "dimension"
+    df_final['componente'] = "componente"
+    df_final['preguntas'] = "preguntas"
+
+    # Contar cuántas veces aparece cada número en las columnas col1 a colN
+    # Derretir el DataFrame para facilitar el conteo
+    df_melted = df_final.melt(id_vars=['dimension', 'componente', 'preguntas'], 
+                          value_vars=columnas,
+                          var_name='columna', value_name='valor')
+
+    # Eliminar los NaN
+    df_melted = df_melted.dropna(subset=['valor'])
+
+    # Contar ocurrencias agrupadas
+    df_agrupado = df_melted.groupby(['dimension', 'componente', 'preguntas', 'valor']).size().reset_index(name='conteo')
+
+    # Opcional: Pivot para que los valores aparezcan como columnas (1, 2, 3...)
+    df_resultado = df_agrupado.pivot_table(index=['dimension', 'componente', 'preguntas'],
+                                       columns='valor',
+                                       values='conteo',
+                                       fill_value=0).reset_index()
+
+    # Renombrar las columnas de números
+    df_resultado.columns.name = None  # Quita el nombre del índice de columnas
+    df_resultado.columns = [str(col) if isinstance(col, int) else col for col in df_resultado.columns]
+
+    return df_resultado
+
+def GenerarGraficaRadarDimensiones(df_promedio_dimension):
+     print(df_promedio_dimension.columns)
+
+    # Asegúrate de tener estas columnas (ajusta si el nombre varía)
+     col_dim = 'Dimension'
+     col_origen = 'Excel Origen'
+     col_valor = 'Valor'
+
+     # Pivot para que las dimensiones sean ejes
+     df_pivot = df_promedio_dimension.pivot(index=col_dim, columns=col_origen, values=col_valor).fillna(0)
+
+     # Ordenar dimensiones para cerrar el radar
+     labels = df_pivot.index.tolist()
+     num_vars = len(labels)
+
+     # Añadir el primer valor al final para cerrar el círculo
+     angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+     angles += angles[:1]
+
+    # Inicializar la figura
+     fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+
+    # Colores personalizados
+     colores = {
+        'Miembro 2025': '#0000FF',
+        'Directiva 2025': '#228B22'
+     }
+
+     # Dibujar cada línea
+     for origen in df_pivot.columns:
+        valores = df_pivot[origen].tolist()
+        valores += valores[:1]  # Cierre del círculo
+        ax.plot(angles, valores, label=origen, color=colores.get(origen, '#999999'))
+        ax.fill(angles, valores, alpha=0.1, color=colores.get(origen, '#999999'))
+
+    # Ajustar los ejes
+     ax.set_theta_offset(np.pi / 2)
+     ax.set_theta_direction(-1)
+     ax.set_thetagrids(np.degrees(angles[:-1]), labels)
+
+     # Título y leyenda
+     plt.title("Promedio por Dimensión con Directiva y Miembros ", size=14, pad=20)
+     plt.legend(loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=2)
+
+     plt.tight_layout()
+     plt.show()
+
+
            
 
 #funcion Principal que inicia el programa
@@ -282,7 +374,7 @@ def main():
     df_2025Directivos = AgregarComponenteFaltantes(df_2025PreguntasDirectivo, df_2025Directivos,"Dimension","Subdimension","Valor")
     df_2025Miembros = AgregarComponenteFaltantes(df_2025PreguntasMiembro, df_2025Miembros,"Dimension","Subdimension","Valor")
 
-    df_ListadoPreguntasEstructuradaDirector2025 = AgregarConteoPreguntasSeleccionMultiple(df_2025PreguntasDirectivo, df_2025Directivos,"Dimension","Subdimension","Pregunta","TipoPregunta","Valor")
+    df_ListadoPreguntasEstructuradaDirector2025 =  AgregarConteoPreguntasSeleccionMultiple(df_2025Directivos,"Dimension","Subdimension","Pregunta","TipoPregunta","Valor")
 
     df_2025DirectivosImpresion = df_2025Directivos.copy()
     df_2025MiembrosImpresion = df_2025Miembros.copy()
@@ -307,7 +399,8 @@ def main():
                                                                 ,"2025"
                                                                 ,"Miembro")
 
-
+    df_promedio_dimension = pd.concat([ResultadoDimensionesDirectivo2025, ResultadoDimensionesMiembro2025], ignore_index=True)
+    GenerarGraficaRadarDimensiones(df_promedio_dimension)
 
     with pd.ExcelWriter('Respuestas.xlsx', engine='openpyxl') as writer:
         df_2025MiembrosImpresion.to_excel(writer, sheet_name='Miembros', index=False)
@@ -317,6 +410,9 @@ def main():
         promedio_dimension_directivo.to_excel(writer, sheet_name='PromedioDirectivoComponente', index=False)
         promedio_dimension_Miembro.to_excel(writer, sheet_name='PromedioMiembroComponente', index=False)
         df_ListadoPreguntasEstructuradaDirector2025.to_excel(writer, sheet_name='ListadoPreguntasEstructuradaDirector2025', index=False)
+    
+    
+    
     print("fin de ejecucion")
 
 
