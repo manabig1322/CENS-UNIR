@@ -3,6 +3,7 @@ import re
 import unicodedata
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from math import pi
 import seaborn as sns
 #import os
@@ -387,6 +388,96 @@ def AgregarConteoPreguntasSeleccionMultiple(df2,columnaDimension, columnaCompone
    
     return conteo_final
 
+def AgregarConteoPreguntasLikert(df):
+
+ 
+        # Filtrar solo filas con TipoPregunta igual a 'Likert'
+    df_filtrado = df[df['TipoPregunta'] == 'Likert']
+    
+    # Agrupar por Dimension, Subdimension, Pregunta y Valor (incluyendo NaN)
+    conteo = df_filtrado.groupby(['Dimension', 'Subdimension', 'Pregunta', 'Valor'], dropna=False) \
+                        .size().reset_index(name='Cantidad')
+    
+    # Convertir valores numéricos (ignorar NaN)
+    valores_numericos = pd.to_numeric(conteo['Valor'], errors='coerce')
+    valor_maximo = int(valores_numericos.max(skipna=True))
+    
+    # Obtener combinaciones únicas de grupo
+    grupos = conteo[['Dimension', 'Subdimension', 'Pregunta']].drop_duplicates()
+    
+    # Crear lista con todos los valores esperados (1 al max)
+    valores_completos = list(range(1, valor_maximo + 1))
+    
+    # Crear combinaciones para valor_1 hasta valor_n
+    grilla = pd.DataFrame([
+        (dim, sub, preg, val) 
+        for _, (dim, sub, preg) in grupos.iterrows()
+        for val in valores_completos
+    ], columns=['Dimension', 'Subdimension', 'Pregunta', 'Valor'])
+    
+    # Combinar con los datos reales (sin NaN)
+    conteo_sin_nan = conteo[conteo['Valor'].notna()].copy()
+    conteo_sin_nan['Valor'] = conteo_sin_nan['Valor'].astype(int)
+    
+    conteo_completo = pd.merge(grilla, conteo_sin_nan, 
+                               on=['Dimension', 'Subdimension', 'Pregunta', 'Valor'], 
+                               how='left').fillna({'Cantidad': 0})
+    
+    # Crear columna Valor_Nombre como valor_1, valor_2, etc.
+    conteo_completo['Valor_Nombre'] = conteo_completo['Valor'].apply(lambda x: f'valor_{int(x)}')
+    conteo_completo['Cantidad'] = conteo_completo['Cantidad'].astype(int)
+    
+    # ---- AÑADIR valor_nan con cantidad = 0 si no existe ----
+    # Identificar grupos que NO tienen valor_nan
+    grupos_con_nan = conteo[conteo['Valor'].isna()][['Dimension', 'Subdimension', 'Pregunta']]
+    grupos_faltantes_nan = pd.merge(grupos, grupos_con_nan, 
+                                    on=['Dimension', 'Subdimension', 'Pregunta'], 
+                                    how='left', indicator=True)
+    grupos_sin_nan = grupos_faltantes_nan[grupos_faltantes_nan['_merge'] == 'left_only'] \
+                        .drop(columns='_merge')
+    
+    # Crear registros valor_nan = 0 para esos grupos
+    faltantes_nan = grupos_sin_nan.copy()
+    faltantes_nan['Valor_Nombre'] = 'valor_nan'
+    faltantes_nan['Cantidad'] = 0
+    
+    # Tomar registros valor_nan existentes
+    conteo_nan = conteo[conteo['Valor'].isna()].copy()
+    conteo_nan['Valor_Nombre'] = 'valor_nan'
+    conteo_nan = conteo_nan[['Dimension', 'Subdimension', 'Pregunta', 'Valor_Nombre', 'Cantidad']]
+    
+    # Unir los existentes con los faltantes
+    valor_nan_final = pd.concat([
+        conteo_nan,
+        faltantes_nan[['Dimension', 'Subdimension', 'Pregunta', 'Valor_Nombre', 'Cantidad']]
+    ], ignore_index=True)
+    
+    # Juntar todo: valores del 1 al n + valor_nan
+    conteo_resultado = pd.concat([
+        conteo_completo[['Dimension', 'Subdimension', 'Pregunta', 'Valor_Nombre', 'Cantidad']],
+        valor_nan_final
+    ], ignore_index=True)
+    
+    # Ordenar: valor_1 ... valor_n, luego valor_nan
+    def extraer_orden(valor_nombre):
+        if valor_nombre == 'valor_nan':
+            return np.inf
+        try:
+            return int(valor_nombre.split('_')[1])
+        except:
+            return np.inf
+    
+    conteo_resultado['Orden'] = conteo_resultado['Valor_Nombre'].apply(extraer_orden)
+    
+    # Orden final
+    conteo_final = conteo_resultado.sort_values(by=['Dimension', 'Subdimension', 'Pregunta', 'Orden']) \
+                                    .drop(columns='Orden')
+    
+    # Mostrar o guardar
+    # conteo_final.to_csv('conteo_likert_completo_con_nan.csv', index=False)
+    #print(conteo_final)
+    return conteo_final
+        
 # Preparar título manejando largo de la pregunta
 def dividir_titulo(texto, max_caracteres=80):
     palabras = texto.split()
@@ -401,10 +492,11 @@ def dividir_titulo(texto, max_caracteres=80):
     if linea_actual:
         lineas.append(linea_actual)
     return '\n'.join(lineas)
-def GenerarGraficaPorPregunta(df, ExcelOrgien):
-    # Diccionario para traducir Respuesta a significado
 
-    if ExcelOrgien=="Miembros":
+def GenerarGraficaPorPregunta(df, ExcelOrgien):
+ 
+    # Diccionario para traducir Respuesta a significado
+    if ExcelOrgien == "Miembros":
         significados = {
             'respuesta1': 'Nada efectivas',
             'respuesta2': 'Poco efectivas',
@@ -415,86 +507,76 @@ def GenerarGraficaPorPregunta(df, ExcelOrgien):
             'respuesta_otros': 'Otros'
         }
     else:
+        significados = {
+            'respuesta1': 'La falta de confianza entre los miembros',
+            'respuesta2': 'El tiempo escaso para compartir información',
+            'respuesta3': 'Moderadamente efectivas',
+            'respuesta4': 'La escasa practicidad de las plataformas digitales',
+            'respuesta5': 'Los bajos incentivos para compartir conocimiento',
+            'respuesta6': 'La actitud de las personas',
+            'respuesta_otros': 'Otros (especificar)'
+        }
 
-      significados = {
-        'respuesta1': 'La falta de confianza entre los miembros',
-        'respuesta2': 'El tiempo escaso para compartir información',
-        'respuesta3': 'Moderadamente efectivas',
-        'respuesta4': 'La escasa practicidad de las plataformas digitales',
-        'respuesta5': 'Los bajos incentivos para compartir conocimiento',
-        'respuesta6': 'La actitud de las personas',
-        'respuesta_otros': 'Otros (especificar)'
-    }
-   
-    # Colores personalizados para cada significado
-    colores = {
-        'respuesta1': '#1f77b4', # azul
-        'respuesta2': '#ff7f0e', # naranja
-        'respuesta3': '#2ca02c', # verde
-        'respuesta4': '#d62728', # rojo
-        'respuesta5': '#9467bd', # morado
-        'respuesta6': '#8c564b', # marrón
-        'respuesta_otros': '#7f7f7f' # gris
-    }
-    
-    # Crear carpeta para guardar las gráficas
-   # os.makedirs('graficas_preguntas', exist_ok=True)
-     
-   # **Flag para mostrar o no 'respuesta_otros'**
-    mostrar_otros = False  # Cambia a False si no quieres que se grafique 'Otros'
+    mostrar_otros = False
     if not mostrar_otros:
         df = df[df['Respuesta'] != 'respuesta_otros']
-    # Agrupar por Dimension, Subdimension y Pregunta
+
     grupos = df.groupby(['Dimension', 'Subdimension', 'Pregunta'])
-    
+
     for (dimension, subdimension, pregunta), datos in grupos:
-        plt.figure(figsize=(10, 6))  # Un poquito más de alto
-    
-    # Ordenar por respuesta
+        plt.figure(figsize=(10, 6))
+
         datos['Orden'] = datos['Respuesta'].apply(lambda x: int(x.replace('respuesta', '').replace('_otros', '99')))
         datos = datos.sort_values('Orden')
 
-        etiquetas = [significados.get(resp, resp) for resp in datos['Respuesta']]
+        respuestas = list(datos['Respuesta'])
+        etiquetas_numericas = list(range(1, len(respuestas) + 1))
+        etiquetas_texto = [significados.get(resp, resp) for resp in respuestas]
         cantidades = datos['Cantidad']
-        colores_barras = [colores.get(resp, '#333333') for resp in datos['Respuesta']]
+        total_respuestas = cantidades.sum()
 
-        barras = plt.bar(range(len(cantidades)), cantidades, color=colores_barras)
+        # Crear colores degradados en azul (oscuro a claro)
+        cmap = cm.get_cmap('Blues')
+        degradado = cmap(np.linspace(0.9, 0.4, len(respuestas)))
 
-        # **Mover los números un poco más abajo de la parte superior**
+        barras = plt.bar(etiquetas_numericas, cantidades, color=degradado)
+
+        # Mostrar conteo y porcentaje encima de cada barra
         for barra, cantidad in zip(barras, cantidades):
+            porcentaje = (cantidad / total_respuestas) * 100
+            texto = f"{int(cantidad)} ({porcentaje:.1f}%)"
             plt.text(
-                barra.get_x() + barra.get_width()/2, 
-                barra.get_height() + (max(cantidades) * 0.00),  # Subir un 3% del máximo
-                str(int(cantidad)),
-                ha='center', 
+                barra.get_x() + barra.get_width() / 2,
+                barra.get_height() + (max(cantidades) * 0.00),
+                texto,
+                ha='center',
                 va='bottom',
                 fontsize=10
             )
 
         titulo_formateado = f"{dimension} - {subdimension}\n{dividir_titulo(pregunta)}"
         plt.title(titulo_formateado, fontsize=14)
-        plt.xlabel('Respuesta')
+        plt.xlabel('Respuestas (número)')
         plt.ylabel('Cantidad')
-        plt.xticks([])
+        plt.xticks(etiquetas_numericas, [str(n) for n in etiquetas_numericas], fontsize=12)
 
-        # Leyenda ordenada en 2 columnas
-        handles = [plt.Rectangle((0,0),1,1, color=colores.get(resp, '#333333')) for resp in datos['Respuesta']]
-        labels = etiquetas
+        # Leyenda con degradado y descripción
+        handles = [plt.Rectangle((0, 0), 1, 1, color=degradado[i]) for i in range(len(respuestas))]
+        labels = [f"{i + 1}: {etiquetas_texto[i]}" for i in range(len(etiquetas_texto))]
         plt.legend(
-            handles, labels, title="Respuestas", 
+            handles, labels, title="Respuestas",
             loc='upper center', bbox_to_anchor=(0.5, -0.18),
             ncol=2, fancybox=True, shadow=True, frameon=True
         )
 
-        # **Ajuste extra para dejar más espacio arriba**
         plt.subplots_adjust(top=0.85)
-
         plt.tight_layout()
-    # Guardar la imagen
-        #nombre_archivo = f"graficas_preguntas/{dimension}_{subdimension}_{pregunta}.png".replace('/', '-').replace('\\', '-')
-        #plt.savefig(nombre_archivo)
         plt.show()
         plt.close()
+
+
+
+
 
 
 
@@ -562,10 +644,7 @@ def GenerarGraficaRadarDimensiones(df_promedio_dimension):
 
 
 
-
-#funcion que genera la grafica de radar por componente
-
-def generar_grafica_radar_total(df_promedio, Columna,Valor):
+def generar_grafica_radar_total(df_promedio, Columna, Valor):
     # Asignar números a las dimensiones
     dimensiones = df_promedio[Columna].unique()
     dimension_dict = {dim: i+1 for i, dim in enumerate(dimensiones)}  # Asigna un número a cada dimensión
@@ -585,9 +664,11 @@ def generar_grafica_radar_total(df_promedio, Columna,Valor):
     valores = df_promedio['Valor'].tolist()
     valores += valores[:1]  # Cerrar el círculo
 
-    # Colores personalizados (si no se proporcionan, se eligen colores por defecto)
-    if colores_personalizados is None:
-        colores_personalizados = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+    # Determinar el valor máximo y ajustar la escala
+    max_valor = max(valores)
+    scale_max = np.ceil(max_valor)  # Redondear hacia el siguiente entero
+    scale_max = int(scale_max + 2)  # Asegurarse de que el valor máximo sea el valor más alto + 2
+    ticks = np.arange(0, scale_max, 1)  # Establecer las marcas de la escala solo con enteros
 
     # Crear la figura de radar
     fig, ax = plt.subplots(figsize=(8, 6), subplot_kw=dict(polar=True))
@@ -599,18 +680,26 @@ def generar_grafica_radar_total(df_promedio, Columna,Valor):
         ax.plot(angles, valores_dim, linewidth=2, linestyle='solid', label=f'{dimension_dict[dim]}: {dim}', color=color)
         ax.fill(angles, valores_dim, alpha=0.1, color=color)
 
+        # Agregar el valor en la punta de la gráfica
+        valor_promedio = df_promedio[df_promedio[Columna] == dim][Valor].values[0]
+        ax.text(angles[i], valores[i], f'{valor_promedio:.2f}', horizontalalignment='center', verticalalignment='bottom', fontsize=10, color=color)
+
     # Ajustar los ejes
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
-    
+
     # Etiquetas con números en lugar de nombres de dimensiones
     ax.set_thetagrids(np.degrees(angles[:-1]), [str(dimension_dict[dim]) for dim in dimensiones])
+
+    # Establecer la escala en los ejes radiales
+    ax.set_rlabel_position(0)  # Mover las etiquetas radiales
+    ax.set_rticks(ticks)  # Establecer las marcas de la escala solo con enteros
 
     # Título
     ax.set_title('Prom. Total Dimensión', size=16, pad=20)
 
     # Leyenda con los números, dimensiones y valores asociados, movida a la derecha y centrada
-    leyenda_dimensiones = [f"{i+1}: {dim} (Valor: {df_promedio[df_promedio[Columna] == dim][Valor].values[0]:.2f})" for i, dim in enumerate(dimensiones)]
+    leyenda_dimensiones = [f"{i+1}: {dim}" for i, dim in enumerate(dimensiones)]
     ax.legend(leyenda_dimensiones, loc='center left', bbox_to_anchor=(1.1, 0.5), fontsize=10, title="Dimensiones")
 
     # Ajustar el layout para evitar que la leyenda se sobreponga
@@ -619,7 +708,9 @@ def generar_grafica_radar_total(df_promedio, Columna,Valor):
 
 
 
+
 def generar_graficas_componentes_total(df):
+    
     dimensiones = df['Dimension'].unique()
 
     # Colores personalizables para subdimensiones
@@ -651,13 +742,21 @@ def generar_graficas_componentes_total(df):
             numeros = list(range(1, num_vars + 1))
             ax.set_thetagrids(np.degrees(angles[:-1]), labels=[str(n) for n in numeros])
 
+            # Mostrar los valores en cada punta
+            for angle, valor in zip(angles[:-1], valores):
+                ax.text(angle, valor + 0.1, f"{valor:.2f}", ha='center', va='bottom', fontsize=9, color='black')
+
+            # Ajustar escala con enteros
+            max_val = max(valores)
+            ax.set_rgrids(range(1, int(np.ceil(max_val)) + 1))
+
             # Título
-            plt.suptitle(f'Promedio Total. Dim: {dimension}', fontsize=16, y=0.95)
+            plt.suptitle(f'Dimensión: {dimension}', fontsize=16, y=0.95)
 
             # Construir la leyenda manualmente
             leyenda_texto = ""
             for idx, (sub, val) in enumerate(zip(subdimensiones, valores)):
-               # color = colores_subdimensiones[idx % len(colores_subdimensiones)]
+                color = colores_subdimensiones[idx % len(colores_subdimensiones)]
                 leyenda_texto += f"{idx+1}: {sub} ({val:.2f})\n"
 
             # Agregar la leyenda como texto a la derecha
@@ -814,6 +913,9 @@ def main():
    
     df_ListadoPreguntasEstructuradaDirectiva2025 =  AgregarConteoPreguntasSeleccionMultiple(df_2025Directivos,"Dimension","Subdimension","Pregunta","TipoPregunta","Valor")
     df_ListadoPreguntasEstructuradaMiembro2025 =  AgregarConteoPreguntasSeleccionMultiple(df_2025Miembros,"Dimension","Subdimension","Pregunta","TipoPregunta","Valor")
+    
+    AgregarConteoPreguntasLikert(df_2025Directivos)
+    
     GenerarGraficaPorPregunta(df_ListadoPreguntasEstructuradaDirectiva2025,"Directiva")
     GenerarGraficaPorPregunta(df_ListadoPreguntasEstructuradaMiembro2025,"Miembros")
 
