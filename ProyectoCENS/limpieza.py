@@ -55,6 +55,8 @@ def LimpiezaDatos(df_2023,df_2025Directivos,df_2025Miembros,df_2025PreguntasDire
     df_2025PreguntasDirectivo = limpiar_columna_numeros(df_2025PreguntasDirectivo,"Subdimension")
     df_2025PreguntasMiembro = limpiar_columna_numeros(df_2025PreguntasMiembro,"Subdimension")
     
+    df_2023 = limpiar_columna_numeros(df_2023,"Categoria")
+    
 
        #creando diccionario para reemplazar los nombres de las dimensiones por su nombre corto de dimensiones en el dataset
        
@@ -100,11 +102,13 @@ def LimpiezaDatos(df_2023,df_2025Directivos,df_2025Miembros,df_2025PreguntasDire
         "Selección múltiple con texto":"Seleccion multiple con texto"
         }
        #reemplazando los nombres de las dimensiones por su nombre corto de dimensiones en el dataset
+    diccionario_categoria ={"Gestor Proyecto":"Gestor de Proyecto"}
     for llave, valor in diccionario_dimension.items():
            df_2023 = ReemplazarValorDataSet(df_2023
                                                ,"Dimension"
                                                ,llave
                                                ,valor)
+         
            df_2025Directivos = ReemplazarValorDataSet(df_2025Directivos
                                                ,"Dimension"
                                                ,llave
@@ -154,7 +158,11 @@ def LimpiezaDatos(df_2023,df_2025Directivos,df_2025Miembros,df_2025PreguntasDire
                                                       ,"TipoPregunta"
                                                       ,llave
                                                       ,valor)
-
+    for llave, valor in diccionario_categoria.items():
+       df_2023 = ReemplazarValorDataSet(df_2023
+                                           ,"Categoria"
+                                           ,llave
+                                           ,valor)
 
 
     # quitando filas en Minusculas

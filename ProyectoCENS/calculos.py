@@ -1,11 +1,15 @@
 
 import pandas as pd
 
-def calcularPromedioTotalCategoria(df,columna1,columna2,columna3,valor):
+def calcularPromedioTotalCategoria(df,columna1,columna2,valor, Año,ExcelOrigen):
     # 1. Convertir 'valor' a numérico, forzando ignorar los valores no numericas
     df[valor] = pd.to_numeric(df[valor], errors='coerce')
-    # Agrupar por 'dimension' y calcular el promedio de 'valor' para cada grupo
-    df_promedio = df.groupby([columna1,columna2,columna3])[valor].mean().reset_index()
+    # 2. Agrupar por 'dimension' y calcular el promedio de 'valor' para cada grupo
+    df_promedio = df.groupby([columna1,columna2])[valor].mean().reset_index()
+    # 3. Agregando la columna año
+    df_promedio['Año'] = Año
+    # 4. Agregando la columna tipo de Excel para saber cual excel uso para la informacion
+    df_promedio['Excel Origen'] = f"{ExcelOrigen}"
 
     # Devolver el nuevo dataset con 'dimension' y 'valor'
     return df_promedio

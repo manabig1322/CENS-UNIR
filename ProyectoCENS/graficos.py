@@ -7,6 +7,79 @@ import numpy as np
 from math import pi
 from utils import dividir_titulo
 
+def graficar_por_categoria(df, colores_por_anio=None):
+    if colores_por_anio is None:
+        colores_por_anio = {
+            "2023": '#00bf74',
+            "2025": '#007bd2'
+        }
+
+    categorias = df['Categoria'].unique()
+
+    for categoria in categorias:
+        df_cat = df[df['Categoria'] == categoria]
+        dimensiones = df_cat['Dimension'].unique()
+
+        if len(dimensiones) <= 2:
+            # Gráfico de barras
+            pivot = df_cat.pivot(index='Dimension', columns='Año', values='Valor').fillna(0)
+            pivot.plot(kind='bar', color=[colores_por_anio.get(a, '#999999') for a in pivot.columns])
+            plt.title(f'Categoría: {categoria} - Barras por Año')
+            plt.ylabel('Valor')
+            plt.xticks(rotation=0)
+            plt.legend(title='Año')
+            plt.tight_layout()
+            plt.show()
+
+        else:
+            # Gráfico de radar
+            df_pivot = df_cat.pivot(index='Dimension', columns='Año', values='Valor').fillna(0)
+            labels = df_pivot.index.tolist()
+            num_vars = len(labels)
+            angles = np.linspace(0, 2*np.pi, num_vars, endpoint=False).tolist()
+            angles += angles[:1]
+
+            fig, ax = plt.subplots(figsize=(8,8), subplot_kw=dict(polar=True))
+
+            # Escala con margen de 2 unidades
+            max_raw = df_pivot.max().max()
+            max_val = int(np.floor(max_raw + 2))
+           # Escala radial sin el 0, comenzando en 1
+            ticks = list(range(1, max_val + 1))
+            ax.set_ylim(1, max_val)
+            ax.set_yticks(ticks)
+            ax.set_yticklabels([str(t) for t in ticks])
+
+            for anio in df_pivot.columns:
+                valores = df_pivot[anio].tolist()
+                valores += valores[:1]
+                ax.plot(angles, valores, label=str(anio), color=colores_por_anio.get(anio, '#333333'))
+                ax.fill(angles, valores, alpha=0.1, color=colores_por_anio.get(anio, '#333333'))
+
+                # Mostrar valores en las puntas
+                for i, (angle, value) in enumerate(zip(angles[:-1], valores[:-1])):
+                    ax.text(
+                        angle, value + 0.2, f"{value:.1f}",
+                        ha='center', va='bottom', fontsize=9,
+                        color=colores_por_anio.get(anio, '#333333')
+                    )
+
+            # Etiquetas numéricas en los ejes
+            ax.set_theta_offset(np.pi/2)
+            ax.set_theta_direction(-1)
+            ax.set_thetagrids(np.degrees(angles[:-1]), [str(i+1) for i in range(num_vars)])
+
+            # Título y leyenda
+            fig.suptitle(f"Categoría: {categoria} - Radar por Dimensión", fontsize=14, y=0.95)
+            ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.1), ncol=2, frameon=False)
+
+            # Leyenda textual con número y dimensión
+            texto_dim = "\n".join([f"{i+1}: {dim}" for i, dim in enumerate(labels)])
+            plt.figtext(0.75, 0.5, texto_dim, ha='left', va='center', fontsize=10, fontfamily='monospace')
+
+            fig.subplots_adjust(left=0.05, right=0.7, top=0.9, bottom=0.2)
+            plt.show()
+
 def generar_graficas_componentes_total(df):
     
     dimensiones = df['Dimension'].unique()
@@ -278,9 +351,6 @@ def GenerarGraficaPorPreguntaLikert(df,ArchivoOrigen,df_preguntas):
 
 
 
-
-
-
 def GenerarGraficaRadarDimensiones(df_promedio_dimension):
     col_dim    = 'Dimension'
     col_origen = 'Excel Origen'
@@ -377,7 +447,7 @@ def generar_grafica_radar_total(df_promedio, Columna, Valor):
     angles += angles[:1]  # Cerrar el círculo
 
     # Valores para la gráfica (promedio por dimensión)
-    valores = df_promedio['Valor'].tolist()
+    valores = df_promedio[Valor].tolist()
     valores += valores[:1]  # Cerrar el círculo
 
     # Determinar el valor máximo y ajustar la escala
