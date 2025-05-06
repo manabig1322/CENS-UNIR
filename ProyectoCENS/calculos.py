@@ -3,7 +3,7 @@ import pandas as pd
 
 def calcularPromedioTotalCategoria(df,columna1,columna2,columna3,valor):
     # 1. Convertir 'valor' a numérico, forzando ignorar los valores no numericas
-    df[columnaValor] = pd.to_numeric(df[columnaValor], errors='coerce')
+    df[valor] = pd.to_numeric(df[valor], errors='coerce')
     # Agrupar por 'dimension' y calcular el promedio de 'valor' para cada grupo
     df_promedio = df.groupby([columna1,columna2,columna3])[valor].mean().reset_index()
 
