@@ -302,8 +302,7 @@ def GenerarGraficaPorPreguntaLikert(df,ArchivoOrigen,df_preguntas):
         # Crear colores degradados en azul (oscuro a claro)
         cmap = cm.get_cmap('Blues')
         colores = cmap(np.linspace(0.9, 0.4, len(cantidades)))
-        #colores = generar_colores_azul(len(cantidades))
-    
+ 
        # Crear gráfico
         plt.figure(figsize=(8, 6))
         bars = plt.bar(etiquetas, cantidades, color=colores, edgecolor='black')
