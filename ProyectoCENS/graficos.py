@@ -239,7 +239,7 @@ def GenerarGraficaPorPregunta(df, ExcelOrgien):
 
         plt.subplots_adjust(top=0.85)
         plt.tight_layout()
-        plt.savefig(f"graficas/{dimension}_{subdimension}_{pregunta}.png", bbox_inches='tight')
+       # plt.savefig(f"graficas/{dimension}_{subdimension}_{pregunta}.png", bbox_inches='tight')
         plt.show()
         plt.close()
 
@@ -248,25 +248,7 @@ def GenerarGraficaPorPreguntaLikert(df,ArchivoOrigen,df_preguntas):
         # Leer el datset de pregunta likert procesasa
     conteo_final =df
     
-    # Diccionario de mapeo de nombres (puedes personalizarlo aquí)
-    # if(ArchivoOrigen=="Directiva"):
-    #     valor_map = {
-    #         'valor_1': '1 (Nada efectivas)',
-    #         'valor_2': '2 (Poco efectivas)',
-    #         'valor_3': '3 (Moderadamente efectivas)',
-    #         'valor_4': '4 (Efectivas)',
-    #         'valor_5': '5 (Muy efectivas)',
-    #         'valor_nan': 'N/A (No Aplica)'
-    #     }
-    # else:
-    #     valor_map = {
-    #         'valor_1': '1 (Nunca)',
-    #         'valor_2': '2 (1 vez al mes)',
-    #         'valor_3': '3 (2-3 veces al mes)',
-    #         'valor_4': '4 (1 vez a la semana)',
-    #         'valor_5': '5 (Más de una vez a la semana)',
-    #         'valor_nan': 'N/A (No Aplica)'
-    #     }
+
 
     # Crear carpeta de salida
     #os.makedirs("graficas", exist_ok=True)
@@ -304,22 +286,25 @@ def GenerarGraficaPorPreguntaLikert(df,ArchivoOrigen,df_preguntas):
             # Si no hay coincidencia, usar etiquetas por defecto
             valor_map = {}
     
-        # Agregar valor_nan
         valor_map['valor_nan'] = 'Sin respuesta'
-    
-        # Extraer orden y etiquetas
+
+       # Extraer orden y etiquetas
         df_plot[['Orden', 'Etiqueta']] = df_plot['Valor_Nombre'].apply(lambda v: pd.Series(obtener_orden(v)))
         df_plot = df_plot.sort_values('Orden')
     
-        etiquetas = df_plot['Etiqueta'].tolist()
-        cantidades = df_plot['Cantidad'].tolist()
-        nombres_originales = df_plot['Valor_Nombre'].tolist()
-        total = sum(cantidades)
+       # Eliminar filas con valor_nan para graficar
+        df_barras = df_plot[df_plot['Valor_Nombre'] != 'valor_nan'].copy()
     
+        etiquetas = df_barras['Etiqueta'].tolist()
+        cantidades = df_barras['Cantidad'].tolist()
+        nombres_originales = df_barras['Valor_Nombre'].tolist()
+        total = sum(cantidades)
         # Crear colores degradados en azul (oscuro a claro)
         cmap = cm.get_cmap('Blues')
         colores = cmap(np.linspace(0.9, 0.4, len(cantidades)))
-        # Crear gráfico
+        #colores = generar_colores_azul(len(cantidades))
+    
+       # Crear gráfico
         plt.figure(figsize=(8, 6))
         bars = plt.bar(etiquetas, cantidades, color=colores, edgecolor='black')
     
@@ -344,7 +329,7 @@ def GenerarGraficaPorPreguntaLikert(df,ArchivoOrigen,df_preguntas):
                    ncol=2, frameon=False, fontsize=8)
     
         plt.tight_layout()
-        plt.savefig(f"graficas/{ArchivoOrigen}_{i}.png", bbox_inches='tight')
+        #plt.savefig(f"graficas/{ArchivoOrigen}_{i}.png", bbox_inches='tight')
         i+=1
         plt.show()
         plt.close()
