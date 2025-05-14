@@ -14,6 +14,17 @@ def calcularPromedioTotalCategoria(df,columna1,columna2,valor, Año,ExcelOrigen)
     # Devolver el nuevo dataset con 'dimension' y 'valor'
     return df_promedio
 
+#función promedio por dimension o componente
+def promedio_dimension(DataSet, grupo = ['Dimension']):
+    
+    # 1. Promedia el resultados por persona componeten y dimension
+    promedio_dimension_componente_persona = DataSet.groupby(['Dimension','Subdimension', 'Persona'])['Valor'].mean().reset_index()
+    
+    # 2. Promedia esos resultados por dimension y componetn
+    promedio_dimension = promedio_dimension_componente_persona.groupby(grupo)['Valor'].mean().reset_index()
+  
+    return promedio_dimension
+
 def calcularPromedioTotalDimension(df,columna,valor):
     # Agrupar por 'dimension' y calcular el promedio de 'valor' para cada grupo
     df_promedio = df.groupby(columna)[valor].mean().reset_index()

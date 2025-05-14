@@ -2,28 +2,28 @@
 import re
 import unicodedata
 
-def LimpiezaDatos(df_2023,df_2025Directivos,df_2025Miembros,df_2025PreguntasDirectivo,df_2025PreguntasMiembro):
+def LimpiezaDatos(df_2025Directivos,df_2025PreguntasDirectivo):
     
     
-    df_2023  = QuitarEspaciosCeldasAcentosColumnas(df_2023)
+    #df_2023  = QuitarEspaciosCeldasAcentosColumnas(df_2023)
     df_2025Directivos = QuitarEspaciosCeldasAcentosColumnas(df_2025Directivos)
-    df_2025Miembros = QuitarEspaciosCeldasAcentosColumnas(df_2025Miembros)
+   # df_2025Miembros = QuitarEspaciosCeldasAcentosColumnas(df_2025Miembros)
     df_2025PreguntasDirectivo = QuitarEspaciosCeldasAcentosColumnas(df_2025PreguntasDirectivo)
-    df_2025PreguntasMiembro = QuitarEspaciosCeldasAcentosColumnas(df_2025PreguntasMiembro)
+    #df_2025PreguntasMiembro = QuitarEspaciosCeldasAcentosColumnas(df_2025PreguntasMiembro)
 
     #renombrando las columnas para unificar nombres
-    df_2023 = df_2023.rename(columns={'Respuesta': 'Valor'})
+    #df_2023 = df_2023.rename(columns={'Respuesta': 'Valor'})
     df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.rename(columns={'Componente': 'Subdimension'})
-    df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Componente': 'Subdimension'})
+   # df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Componente': 'Subdimension'})
     df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.rename(columns={'Opcion de Respuesta': 'Opciones'})
-    df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Opcion de Respuesta': 'Opciones'})
+   # df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Opcion de Respuesta': 'Opciones'})
 
     df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.rename(columns={'Dimensión': 'Dimension'})
-    df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Dimensión': 'Dimension'})
+    #df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Dimensión': 'Dimension'})
     df_2025PreguntasDirectivo = df_2025PreguntasDirectivo.rename(columns={'Dimensión': 'Dimension'})
-    df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Dimensión': 'Dimension'})
+   # df_2025PreguntasMiembro = df_2025PreguntasMiembro.rename(columns={'Dimensión': 'Dimension'})
 
-    df_2023 = df_2023.rename(columns={'Area': 'Categoria'})
+    #df_2023 = df_2023.rename(columns={'Area': 'Categoria'})
 
     #Quitando los espacios en blanco y quitando acentos de los nombres de las columnas
     # df_2025Directivos =quitar_acentos_columna(df_2025Miembros,"Dimension")
@@ -43,59 +43,42 @@ def LimpiezaDatos(df_2023,df_2025Directivos,df_2025Miembros,df_2025PreguntasDire
 
     
     #quitando los numeros y puntos
-    df_2023 = limpiar_columna_numeros(df_2023,"Dimension")
-    df_2025Miembros = limpiar_columna_numeros(df_2025Miembros,"Dimension")
-    df_2025Directivos = limpiar_columna_numeros(df_2025Directivos,"Dimension")
-    df_2025PreguntasDirectivo = limpiar_columna_numeros(df_2025PreguntasDirectivo,"Dimension")
-    df_2025PreguntasMiembro = limpiar_columna_numeros(df_2025PreguntasMiembro,"Dimension")
-    
-    df_2023 = limpiar_columna_numeros(df_2023,"Subdimension")
-    df_2025Miembros = limpiar_columna_numeros(df_2025Miembros,"Subdimension")
-    df_2025Directivos = limpiar_columna_numeros(df_2025Directivos,"Subdimension")
-    df_2025PreguntasDirectivo = limpiar_columna_numeros(df_2025PreguntasDirectivo,"Subdimension")
-    df_2025PreguntasMiembro = limpiar_columna_numeros(df_2025PreguntasMiembro,"Subdimension")
-    
-    df_2023 = limpiar_columna_numeros(df_2023,"Categoria")
+# =============================================================================
+#     df_2023 = limpiar_columna_numeros(df_2023,"Dimension")
+#     df_2025Miembros = limpiar_columna_numeros(df_2025Miembros,"Dimension")
+#     df_2025Directivos = limpiar_columna_numeros(df_2025Directivos,"Dimension")
+#     df_2025PreguntasDirectivo = limpiar_columna_numeros(df_2025PreguntasDirectivo,"Dimension")
+#     df_2025PreguntasMiembro = limpiar_columna_numeros(df_2025PreguntasMiembro,"Dimension")
+#     
+#     df_2023 = limpiar_columna_numeros(df_2023,"Subdimension")
+#     df_2025Miembros = limpiar_columna_numeros(df_2025Miembros,"Subdimension")
+#     df_2025Directivos = limpiar_columna_numeros(df_2025Directivos,"Subdimension")
+#     df_2025PreguntasDirectivo = limpiar_columna_numeros(df_2025PreguntasDirectivo,"Subdimension")
+#     df_2025PreguntasMiembro = limpiar_columna_numeros(df_2025PreguntasMiembro,"Subdimension")
+#     
+#     df_2023 = limpiar_columna_numeros(df_2023,"Categoria")
+# =============================================================================
     
 
        #creando diccionario para reemplazar los nombres de las dimensiones por su nombre corto de dimensiones en el dataset
        
     diccionario_dimension = {
-        'Dimension de Indicadores':'Indicadores',
-        'Dimensión de los Procesos de Gestión del Conocimiento':'Procesos',
-        'Dimensión de la Tecnología':'Tecnologia',
-        'Dimensión Humana':'Humana',
-        'Dimensión de Indicadores':'Indicadores',
-        'Dimensión de la Estrategía y Dirección':'Estrategia y direccion',
-        'Estrategia y dirección':'Estrategia y direccion',
-        'Tecnología':'Tecnologia',
-        'Ciclos de conversión': 'Ciclos de conversion',
-        'Tipo de tecnología':'Tipo de tecnologia',
-        'Uso de tecnología':'Uso de tecnologia'    }
+        '3. Dimensión de los Procesos de Gestión del Conocimiento':'3. Procesos',
+        '4. Dimensión de la Tecnología':'4. Tecnologia',
+        '2. Dimensión Humana':'2. Humana',
+        '1. Dimensión de la Estrategía y Dirección':'1. Estrategia y direccion'}
 
 
     #creando diccionario para reemplazar los nombres de las componente por su nombre corto de componente en el dataset
     diccionario_componente = {
-        'Definición del Gestión del Conocimiento en la organización':'Definicion de gestion del conocimiento',
-        'Definición de gestión del conocimiento':'Definicion de gestion del conocimiento',
-        'Motivación e incentivos':'Motivacion',
-        'Matriz de conocimiento estratégico': 'Matriz de conocimiento',
-        'Procesos de gestión del conocimiento' :'Procesos',
-        'Plan estratégico':'Plan estrategico',
-        'Tipo de tecnología':'Tipo de tecnologia',
-        'Indicadores de generación de valor':'Indicadores de generacion de valor',
-        'Ciclos de conversión':'Ciclos de conversion',
-        'Ciclos de Conversión':'Ciclos de conversion',
-        'Uso de tecnología':'Uso de tecnologia',
-        'Ciclos de conversión': 'Ciclos de conversion',
-        'Plan estratégico':'Plan estrategico',
-        'Tipo de tecnología':'Tipo de tecnologia',
-        'Uso de tecnología':'Uso de tecnologia',
-        'Comunidades de Conocimiento':'Comunidades de conocimiento',
-        'Motivación':'Motivacion',
-        'Redes de Conocimiento':'Red de conocimiento'
+        '1.2 Plan estratégico':'1.2 Plan estrategico',
+        '1.3 Definición del Gestión del Conocimiento en la organización':'1.3 Definicion de gestion del conocimiento',
+        '2.5 Motivación e incentivos':'2.5 Motivacion',
+        '3.1 Matriz de conocimiento estratégico': '3.1 Matriz de conocimiento',
+        '4.1 Tipo de tecnología' :'4.1 Tipo de tecnologia',
+        '4.2 Uso de tecnología':'4.2 Uso de tecnologia'
 
-    }
+        }
     
     diccionario_tipo_pregunta ={
         "Opción única":"Opcion unica",
@@ -104,73 +87,73 @@ def LimpiezaDatos(df_2023,df_2025Directivos,df_2025Miembros,df_2025PreguntasDire
        #reemplazando los nombres de las dimensiones por su nombre corto de dimensiones en el dataset
     diccionario_categoria ={"Gestor Proyecto":"Gestor de Proyecto"}
     for llave, valor in diccionario_dimension.items():
-           df_2023 = ReemplazarValorDataSet(df_2023
-                                               ,"Dimension"
-                                               ,llave
-                                               ,valor)
+           # df_2023 = ReemplazarValorDataSet(df_2023
+           #                                     ,"Dimension"
+           #                                     ,llave
+           #                                     ,valor)
          
            df_2025Directivos = ReemplazarValorDataSet(df_2025Directivos
                                                ,"Dimension"
                                                ,llave
                                                ,valor)
-           df_2025Miembros = ReemplazarValorDataSet(df_2025Miembros
-                                               ,"Dimension"
-                                               ,llave
-                                               ,valor)
+           # df_2025Miembros = ReemplazarValorDataSet(df_2025Miembros
+           #                                     ,"Dimension"
+           #                                     ,llave
+           #                                     ,valor)
            df_2025PreguntasDirectivo= ReemplazarValorDataSet(df_2025PreguntasDirectivo
                                                ,"Dimension"
                                                ,llave
                                                ,valor)
-           df_2025PreguntasMiembro= ReemplazarValorDataSet(df_2025PreguntasMiembro
-                                               ,"Dimension"
-                                               ,llave
-                                               ,valor)
+           # df_2025PreguntasMiembro= ReemplazarValorDataSet(df_2025PreguntasMiembro
+           #                                     ,"Dimension"
+           #                                     ,llave
+           #                                     ,valor)
 
        #reemplazando los nombres de las componente por su nombre corto de componente en el dataset
     for llave, valor in diccionario_componente.items():
-           df_2023 = ReemplazarValorDataSet(df_2023
-                                               ,"Subdimension"
-                                               ,llave
-                                               ,valor)
+           # df_2023 = ReemplazarValorDataSet(df_2023
+           #                                     ,"Subdimension"
+           #                                     ,llave
+           #                                     ,valor)
            df_2025Directivos = ReemplazarValorDataSet(df_2025Directivos
                                                ,"Subdimension"
                                                ,llave
                                                ,valor)
-           df_2025Miembros = ReemplazarValorDataSet(df_2025Miembros
-                                               ,"Subdimension"
-                                               ,llave
-                                               ,valor)
+           # df_2025Miembros = ReemplazarValorDataSet(df_2025Miembros
+           #                                     ,"Subdimension"
+           #                                     ,llave
+           #                                     ,valor)
            df_2025PreguntasDirectivo= ReemplazarValorDataSet(df_2025PreguntasDirectivo
                                                ,"Subdimension"
                                                ,llave
                                                ,valor)
-           df_2025PreguntasMiembro= ReemplazarValorDataSet(df_2025PreguntasMiembro
-                                               ,"Subdimension"
-                                               ,llave
-                                               ,valor)
+           # df_2025PreguntasMiembro= ReemplazarValorDataSet(df_2025PreguntasMiembro
+           #                                     ,"Subdimension"
+           #                                     ,llave
+           #                                     ,valor)
            
     for llave, valor in diccionario_tipo_pregunta.items():
         df_2025Directivos = ReemplazarValorDataSet(df_2025Directivos
                                                       ,"TipoPregunta"
                                                       ,llave
                                                       ,valor)
-        df_2025Miembros = ReemplazarValorDataSet(df_2025Miembros
-                                                      ,"TipoPregunta"
-                                                      ,llave
-                                                      ,valor)
-    for llave, valor in diccionario_categoria.items():
-       df_2023 = ReemplazarValorDataSet(df_2023
-                                           ,"Categoria"
-                                           ,llave
-                                           ,valor)
+        # df_2025Miembros = ReemplazarValorDataSet(df_2025Miembros
+        #                                               ,"TipoPregunta"
+        #                                               ,llave
+        #                                               ,valor)
+    # for llave, valor in diccionario_categoria.items():
+    #    df_2023 = ReemplazarValorDataSet(df_2023
+    #                                        ,"Categoria"
+    #                                        ,llave
+    #                                        ,valor)
 
 
     # quitando filas en Minusculas
-    df_2023  =  QuitarFilaConMinusculas(df_2023, "Persona")
-    df_2025Miembros =  QuitarFilaConMinusculas(df_2025Miembros, "Persona")
-    df_2025Directivos =  QuitarFilaConMinusculas(df_2025Directivos, "Persona")
+   # df_2023  =  QuitarFilaConMinusculas(df_2023, "Persona")
+   # df_2025Miembros =  QuitarFilaConMinusculas(df_2025Miembros, "Persona")
+   # df_2025Directivos =  QuitarFilaConMinusculas(df_2025Directivos, "Persona")
     
-    return df_2023,df_2025Directivos,df_2025Miembros,df_2025PreguntasDirectivo,df_2025PreguntasMiembro
+    return df_2025Directivos,df_2025PreguntasDirectivo
 
 #funcion que quita los numeros y puntos
 def limpiar_columna_numeros(df,columna):
