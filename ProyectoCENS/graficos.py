@@ -212,7 +212,7 @@ def GenerarGraficaPorPregunta(df, ExcelOrgien):
         # Mostrar conteo y porcentaje encima de cada barra
         for barra, cantidad in zip(barras, cantidades):
             porcentaje = (cantidad / total_respuestas) * 100
-            texto = f"{int(cantidad)} ({porcentaje:.1f}%)"
+            texto = f"({porcentaje:.1f}%)"
             plt.text(
                 barra.get_x() + barra.get_width() / 2,
                 barra.get_height() + (max(cantidades) * 0.00),
@@ -281,10 +281,34 @@ def GenerarGraficaPorPreguntaLikert(df,ArchivoOrigen,df_preguntas):
         if not opciones_row.empty:
             opciones_texto = opciones_row.iloc[0]['Opciones']
             lista_opciones = [op.strip() for op in opciones_texto.split(',')]
+            # Si solo hay 2 opciones, forzamos a usar escala de 5 puntos Likert
+            if len(lista_opciones) == 2:
+                   lista_opciones = [
+                       '1 (Muy en desacuerdo)',
+                       '2 (En desacuerdo)',
+                       '3 (Neutral)',
+                       '4 (De acuerdo)',
+                       '5 (Muy de acuerdo)'
+                       ]
+            elif  len(lista_opciones) == 3:
+                 lista_opciones = [
+                     '1 (Muy en desacuerdo)',
+                     '2 (En desacuerdo)',
+                     '3 (Neutral)',
+                     '4 (De acuerdo)',
+                     '5 (Muy de acuerdo)'
+                     ]
             valor_map = {f'valor_{i+1}': texto for i, texto in enumerate(lista_opciones)}
         else:
-            # Si no hay coincidencia, usar etiquetas por defecto
-            valor_map = {}
+           # Si no hay coincidencia, usar diccionario por defecto
+            valor_map = {
+           'valor_1': '1 (Nada)',
+           'valor_2': '2 (Poco)',
+           'valor_3': '3 (Moderadamente)',
+           'valor_4': '4 (Bien)',
+           'valor_5': '5 (Muy bien)',
+           'valor_nan': 'Sin respuesta'
+           }
     
         valor_map['valor_nan'] = 'Sin respuesta'
 
@@ -311,11 +335,11 @@ def GenerarGraficaPorPreguntaLikert(df,ArchivoOrigen,df_preguntas):
         for bar, cantidad in zip(bars, cantidades):
             yval = bar.get_height()
             porcentaje = (cantidad / total) * 100 if total > 0 else 0
-            plt.text(bar.get_x() + bar.get_width()/2, yval + 0.8, f"{cantidad} ({porcentaje:.0f}%)",
+            plt.text(bar.get_x() + bar.get_width()/2, yval + 0.8, f"{porcentaje:.0f}%",
                      ha='center', va='bottom', fontsize=9)
     
-        plt.title(f'{dim} - {sub} - {preg}', fontsize=10)
-        plt.xlabel('Valor')
+        plt.title(f'{dim} - {sub} - {dividir_titulo(preg,60)}', fontsize=10)
+        plt.xlabel('Opciones')
         plt.ylabel('Cantidad')
         plt.ylim(0, max(cantidades) * 1.4 if cantidades else 5)
     

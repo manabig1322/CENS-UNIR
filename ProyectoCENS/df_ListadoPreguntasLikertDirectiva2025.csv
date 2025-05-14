@@ -1,0 +1,175 @@
+,Dimension,Subdimension,Pregunta,Valor_Nombre,Cantidad
+0,Estrategia y direccion,Definicion de gestion del conocimiento,¿En qué medida conoce la definición de gestión del conocimiento de su organización?,valor_1,1
+1,Estrategia y direccion,Definicion de gestion del conocimiento,¿En qué medida conoce la definición de gestión del conocimiento de su organización?,valor_2,3
+2,Estrategia y direccion,Definicion de gestion del conocimiento,¿En qué medida conoce la definición de gestión del conocimiento de su organización?,valor_3,6
+3,Estrategia y direccion,Definicion de gestion del conocimiento,¿En qué medida conoce la definición de gestión del conocimiento de su organización?,valor_4,11
+4,Estrategia y direccion,Definicion de gestion del conocimiento,¿En qué medida conoce la definición de gestión del conocimiento de su organización?,valor_5,4
+154,Estrategia y direccion,Definicion de gestion del conocimiento,¿En qué medida conoce la definición de gestión del conocimiento de su organización?,valor_nan,0
+5,Estrategia y direccion,Plan estrategico,¿En qué medida considera que las estrategias de gestión del conocimiento están alineadas con los objetivos generales de la empresa?,valor_1,0
+6,Estrategia y direccion,Plan estrategico,¿En qué medida considera que las estrategias de gestión del conocimiento están alineadas con los objetivos generales de la empresa?,valor_2,2
+7,Estrategia y direccion,Plan estrategico,¿En qué medida considera que las estrategias de gestión del conocimiento están alineadas con los objetivos generales de la empresa?,valor_3,4
+8,Estrategia y direccion,Plan estrategico,¿En qué medida considera que las estrategias de gestión del conocimiento están alineadas con los objetivos generales de la empresa?,valor_4,11
+9,Estrategia y direccion,Plan estrategico,¿En qué medida considera que las estrategias de gestión del conocimiento están alineadas con los objetivos generales de la empresa?,valor_5,8
+155,Estrategia y direccion,Plan estrategico,¿En qué medida considera que las estrategias de gestión del conocimiento están alineadas con los objetivos generales de la empresa?,valor_nan,0
+10,Estrategia y direccion,Plan estrategico,¿Está al tanto de las estrategias de gestión del conocimiento implementadas en la organización?,valor_1,0
+11,Estrategia y direccion,Plan estrategico,¿Está al tanto de las estrategias de gestión del conocimiento implementadas en la organización?,valor_2,3
+12,Estrategia y direccion,Plan estrategico,¿Está al tanto de las estrategias de gestión del conocimiento implementadas en la organización?,valor_3,6
+13,Estrategia y direccion,Plan estrategico,¿Está al tanto de las estrategias de gestión del conocimiento implementadas en la organización?,valor_4,11
+14,Estrategia y direccion,Plan estrategico,¿Está al tanto de las estrategias de gestión del conocimiento implementadas en la organización?,valor_5,5
+156,Estrategia y direccion,Plan estrategico,¿Está al tanto de las estrategias de gestión del conocimiento implementadas en la organización?,valor_nan,0
+15,Humana,Comunidades de conocimiento,¿Cuánto considera que las comunidades de conocimiento han beneficiado a los miembros y a la organización?,valor_1,0
+16,Humana,Comunidades de conocimiento,¿Cuánto considera que las comunidades de conocimiento han beneficiado a los miembros y a la organización?,valor_2,5
+17,Humana,Comunidades de conocimiento,¿Cuánto considera que las comunidades de conocimiento han beneficiado a los miembros y a la organización?,valor_3,10
+18,Humana,Comunidades de conocimiento,¿Cuánto considera que las comunidades de conocimiento han beneficiado a los miembros y a la organización?,valor_4,7
+19,Humana,Comunidades de conocimiento,¿Cuánto considera que las comunidades de conocimiento han beneficiado a los miembros y a la organización?,valor_5,2
+145,Humana,Comunidades de conocimiento,¿Cuánto considera que las comunidades de conocimiento han beneficiado a los miembros y a la organización?,valor_nan,1
+20,Humana,Comunidades de conocimiento,¿La organización ha implementado comunidades de conocimiento?,valor_1,1
+21,Humana,Comunidades de conocimiento,¿La organización ha implementado comunidades de conocimiento?,valor_2,0
+22,Humana,Comunidades de conocimiento,¿La organización ha implementado comunidades de conocimiento?,valor_3,0
+23,Humana,Comunidades de conocimiento,¿La organización ha implementado comunidades de conocimiento?,valor_4,0
+24,Humana,Comunidades de conocimiento,¿La organización ha implementado comunidades de conocimiento?,valor_5,24
+157,Humana,Comunidades de conocimiento,¿La organización ha implementado comunidades de conocimiento?,valor_nan,0
+25,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Existe motivación y entusiasmo por implementar la gestión del conocimiento en la empresa ""?",valor_1,0
+26,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Existe motivación y entusiasmo por implementar la gestión del conocimiento en la empresa ""?",valor_2,2
+27,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Existe motivación y entusiasmo por implementar la gestión del conocimiento en la empresa ""?",valor_3,6
+28,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Existe motivación y entusiasmo por implementar la gestión del conocimiento en la empresa ""?",valor_4,14
+29,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Existe motivación y entusiasmo por implementar la gestión del conocimiento en la empresa ""?",valor_5,3
+158,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Existe motivación y entusiasmo por implementar la gestión del conocimiento en la empresa ""?",valor_nan,0
+30,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Mis compañeros de trabajo comparten sus conocimientos conmigo""?",valor_1,0
+31,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Mis compañeros de trabajo comparten sus conocimientos conmigo""?",valor_2,0
+32,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Mis compañeros de trabajo comparten sus conocimientos conmigo""?",valor_3,4
+33,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Mis compañeros de trabajo comparten sus conocimientos conmigo""?",valor_4,17
+34,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Mis compañeros de trabajo comparten sus conocimientos conmigo""?",valor_5,4
+159,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Mis compañeros de trabajo comparten sus conocimientos conmigo""?",valor_nan,0
+35,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Siento la confianza de preguntar abiertamente cualquier duda a mis compañeros o jefes de trabajo, sin ser juzgado""?",valor_1,0
+36,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Siento la confianza de preguntar abiertamente cualquier duda a mis compañeros o jefes de trabajo, sin ser juzgado""?",valor_2,0
+37,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Siento la confianza de preguntar abiertamente cualquier duda a mis compañeros o jefes de trabajo, sin ser juzgado""?",valor_3,2
+38,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Siento la confianza de preguntar abiertamente cualquier duda a mis compañeros o jefes de trabajo, sin ser juzgado""?",valor_4,12
+39,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Siento la confianza de preguntar abiertamente cualquier duda a mis compañeros o jefes de trabajo, sin ser juzgado""?",valor_5,11
+160,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Siento la confianza de preguntar abiertamente cualquier duda a mis compañeros o jefes de trabajo, sin ser juzgado""?",valor_nan,0
+40,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Yo estoy dispuesto a compartir mis conocimientos con mis compañeros de trabajo""?",valor_1,0
+41,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Yo estoy dispuesto a compartir mis conocimientos con mis compañeros de trabajo""?",valor_2,0
+42,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Yo estoy dispuesto a compartir mis conocimientos con mis compañeros de trabajo""?",valor_3,0
+43,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Yo estoy dispuesto a compartir mis conocimientos con mis compañeros de trabajo""?",valor_4,13
+44,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Yo estoy dispuesto a compartir mis conocimientos con mis compañeros de trabajo""?",valor_5,12
+161,Humana,Cultura,"¿Cuán de acuerdo está usted con esta afirmación: ""Yo estoy dispuesto a compartir mis conocimientos con mis compañeros de trabajo""?",valor_nan,0
+45,Humana,Liderazgo,"¿Cuán de acuerdo está con esta afirmación: ""La alta dirección, los gerentes y los líderes de comunidad están comprometidos y abordan los cambios necesarios con la implementación de la gestión del conocimiento""?",valor_1,0
+46,Humana,Liderazgo,"¿Cuán de acuerdo está con esta afirmación: ""La alta dirección, los gerentes y los líderes de comunidad están comprometidos y abordan los cambios necesarios con la implementación de la gestión del conocimiento""?",valor_2,1
+47,Humana,Liderazgo,"¿Cuán de acuerdo está con esta afirmación: ""La alta dirección, los gerentes y los líderes de comunidad están comprometidos y abordan los cambios necesarios con la implementación de la gestión del conocimiento""?",valor_3,5
+48,Humana,Liderazgo,"¿Cuán de acuerdo está con esta afirmación: ""La alta dirección, los gerentes y los líderes de comunidad están comprometidos y abordan los cambios necesarios con la implementación de la gestión del conocimiento""?",valor_4,18
+49,Humana,Liderazgo,"¿Cuán de acuerdo está con esta afirmación: ""La alta dirección, los gerentes y los líderes de comunidad están comprometidos y abordan los cambios necesarios con la implementación de la gestión del conocimiento""?",valor_5,1
+162,Humana,Liderazgo,"¿Cuán de acuerdo está con esta afirmación: ""La alta dirección, los gerentes y los líderes de comunidad están comprometidos y abordan los cambios necesarios con la implementación de la gestión del conocimiento""?",valor_nan,0
+50,Humana,Motivacion,"En su opinión, ¿cuál es el impacto de la gestión del conocimiento en el desarrollo profesional y personal de los colaboradores?",valor_1,0
+51,Humana,Motivacion,"En su opinión, ¿cuál es el impacto de la gestión del conocimiento en el desarrollo profesional y personal de los colaboradores?",valor_2,2
+52,Humana,Motivacion,"En su opinión, ¿cuál es el impacto de la gestión del conocimiento en el desarrollo profesional y personal de los colaboradores?",valor_3,3
+53,Humana,Motivacion,"En su opinión, ¿cuál es el impacto de la gestión del conocimiento en el desarrollo profesional y personal de los colaboradores?",valor_4,14
+54,Humana,Motivacion,"En su opinión, ¿cuál es el impacto de la gestión del conocimiento en el desarrollo profesional y personal de los colaboradores?",valor_5,6
+163,Humana,Motivacion,"En su opinión, ¿cuál es el impacto de la gestión del conocimiento en el desarrollo profesional y personal de los colaboradores?",valor_nan,0
+55,Humana,Motivacion,La organización ofrece reconocimientos a sus colaboradores por su participación en la estrategia de gestión del conocimiento,valor_1,18
+56,Humana,Motivacion,La organización ofrece reconocimientos a sus colaboradores por su participación en la estrategia de gestión del conocimiento,valor_2,0
+57,Humana,Motivacion,La organización ofrece reconocimientos a sus colaboradores por su participación en la estrategia de gestión del conocimiento,valor_3,0
+58,Humana,Motivacion,La organización ofrece reconocimientos a sus colaboradores por su participación en la estrategia de gestión del conocimiento,valor_4,0
+59,Humana,Motivacion,La organización ofrece reconocimientos a sus colaboradores por su participación en la estrategia de gestión del conocimiento,valor_5,7
+164,Humana,Motivacion,La organización ofrece reconocimientos a sus colaboradores por su participación en la estrategia de gestión del conocimiento,valor_nan,0
+60,Humana,Motivacion,¿Considera que los reconocimientos ofrecidos motivan a las personas a participar en la estrategia de gestión del conocimiento?,valor_1,0
+61,Humana,Motivacion,¿Considera que los reconocimientos ofrecidos motivan a las personas a participar en la estrategia de gestión del conocimiento?,valor_2,0
+62,Humana,Motivacion,¿Considera que los reconocimientos ofrecidos motivan a las personas a participar en la estrategia de gestión del conocimiento?,valor_3,3
+63,Humana,Motivacion,¿Considera que los reconocimientos ofrecidos motivan a las personas a participar en la estrategia de gestión del conocimiento?,valor_4,4
+64,Humana,Motivacion,¿Considera que los reconocimientos ofrecidos motivan a las personas a participar en la estrategia de gestión del conocimiento?,valor_5,0
+146,Humana,Motivacion,¿Considera que los reconocimientos ofrecidos motivan a las personas a participar en la estrategia de gestión del conocimiento?,valor_nan,18
+65,Humana,Motivacion,¿En qué nivel percibe que se encuentra la motivación de los colaboradores para participar en iniciativas de gestión del conocimiento?,valor_1,0
+66,Humana,Motivacion,¿En qué nivel percibe que se encuentra la motivación de los colaboradores para participar en iniciativas de gestión del conocimiento?,valor_2,6
+67,Humana,Motivacion,¿En qué nivel percibe que se encuentra la motivación de los colaboradores para participar en iniciativas de gestión del conocimiento?,valor_3,13
+68,Humana,Motivacion,¿En qué nivel percibe que se encuentra la motivación de los colaboradores para participar en iniciativas de gestión del conocimiento?,valor_4,6
+69,Humana,Motivacion,¿En qué nivel percibe que se encuentra la motivación de los colaboradores para participar en iniciativas de gestión del conocimiento?,valor_5,0
+165,Humana,Motivacion,¿En qué nivel percibe que se encuentra la motivación de los colaboradores para participar en iniciativas de gestión del conocimiento?,valor_nan,0
+70,Indicadores,Indicadores de generacion de valor,¿Cuán efectivos considera que son los indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_1,0
+71,Indicadores,Indicadores de generacion de valor,¿Cuán efectivos considera que son los indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_2,1
+72,Indicadores,Indicadores de generacion de valor,¿Cuán efectivos considera que son los indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_3,3
+73,Indicadores,Indicadores de generacion de valor,¿Cuán efectivos considera que son los indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_4,2
+74,Indicadores,Indicadores de generacion de valor,¿Cuán efectivos considera que son los indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_5,0
+147,Indicadores,Indicadores de generacion de valor,¿Cuán efectivos considera que son los indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_nan,19
+75,Indicadores,Indicadores de generacion de valor,¿La organización ha implementado indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_1,17
+76,Indicadores,Indicadores de generacion de valor,¿La organización ha implementado indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_2,0
+77,Indicadores,Indicadores de generacion de valor,¿La organización ha implementado indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_3,0
+78,Indicadores,Indicadores de generacion de valor,¿La organización ha implementado indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_4,0
+79,Indicadores,Indicadores de generacion de valor,¿La organización ha implementado indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_5,8
+166,Indicadores,Indicadores de generacion de valor,¿La organización ha implementado indicadores que miden el valor que aporta la estrategia de gestión del conocimiento a la organización?,valor_nan,0
+80,Indicadores,Indicadores operativos,¿Cuán efectivos considera que son los indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_1,0
+81,Indicadores,Indicadores operativos,¿Cuán efectivos considera que son los indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_2,3
+82,Indicadores,Indicadores operativos,¿Cuán efectivos considera que son los indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_3,6
+83,Indicadores,Indicadores operativos,¿Cuán efectivos considera que son los indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_4,2
+84,Indicadores,Indicadores operativos,¿Cuán efectivos considera que son los indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_5,0
+148,Indicadores,Indicadores operativos,¿Cuán efectivos considera que son los indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_nan,14
+85,Indicadores,Indicadores operativos,¿La organización ha implementado indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_1,14
+86,Indicadores,Indicadores operativos,¿La organización ha implementado indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_2,0
+87,Indicadores,Indicadores operativos,¿La organización ha implementado indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_3,0
+88,Indicadores,Indicadores operativos,¿La organización ha implementado indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_4,0
+89,Indicadores,Indicadores operativos,¿La organización ha implementado indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_5,11
+167,Indicadores,Indicadores operativos,¿La organización ha implementado indicadores que miden la participación y aporte de los colaboradores en la estrategia de gestión del conocimiento?,valor_nan,0
+90,Procesos,Ciclos de conversion,"¿Cuán efectivas han sido las herramientas tecnológicas para la identificación, la captura, el almacenamiento, la distribución y la aplicación del conocimiento?",valor_1,0
+91,Procesos,Ciclos de conversion,"¿Cuán efectivas han sido las herramientas tecnológicas para la identificación, la captura, el almacenamiento, la distribución y la aplicación del conocimiento?",valor_2,3
+92,Procesos,Ciclos de conversion,"¿Cuán efectivas han sido las herramientas tecnológicas para la identificación, la captura, el almacenamiento, la distribución y la aplicación del conocimiento?",valor_3,7
+93,Procesos,Ciclos de conversion,"¿Cuán efectivas han sido las herramientas tecnológicas para la identificación, la captura, el almacenamiento, la distribución y la aplicación del conocimiento?",valor_4,6
+94,Procesos,Ciclos de conversion,"¿Cuán efectivas han sido las herramientas tecnológicas para la identificación, la captura, el almacenamiento, la distribución y la aplicación del conocimiento?",valor_5,0
+149,Procesos,Ciclos de conversion,"¿Cuán efectivas han sido las herramientas tecnológicas para la identificación, la captura, el almacenamiento, la distribución y la aplicación del conocimiento?",valor_nan,9
+95,Procesos,Ciclos de conversion,"¿La organización ha desarrollado los procesos y las herramientas necesarios para la identificación, la captura del conocimiento, el almacenamiento, la distribución (biblioteca, foro, agenda, directorio, eventos de aprendizaje y socialización), y la aplicación del conocimiento?",valor_1,9
+96,Procesos,Ciclos de conversion,"¿La organización ha desarrollado los procesos y las herramientas necesarios para la identificación, la captura del conocimiento, el almacenamiento, la distribución (biblioteca, foro, agenda, directorio, eventos de aprendizaje y socialización), y la aplicación del conocimiento?",valor_2,0
+97,Procesos,Ciclos de conversion,"¿La organización ha desarrollado los procesos y las herramientas necesarios para la identificación, la captura del conocimiento, el almacenamiento, la distribución (biblioteca, foro, agenda, directorio, eventos de aprendizaje y socialización), y la aplicación del conocimiento?",valor_3,0
+98,Procesos,Ciclos de conversion,"¿La organización ha desarrollado los procesos y las herramientas necesarios para la identificación, la captura del conocimiento, el almacenamiento, la distribución (biblioteca, foro, agenda, directorio, eventos de aprendizaje y socialización), y la aplicación del conocimiento?",valor_4,0
+99,Procesos,Ciclos de conversion,"¿La organización ha desarrollado los procesos y las herramientas necesarios para la identificación, la captura del conocimiento, el almacenamiento, la distribución (biblioteca, foro, agenda, directorio, eventos de aprendizaje y socialización), y la aplicación del conocimiento?",valor_5,16
+168,Procesos,Ciclos de conversion,"¿La organización ha desarrollado los procesos y las herramientas necesarios para la identificación, la captura del conocimiento, el almacenamiento, la distribución (biblioteca, foro, agenda, directorio, eventos de aprendizaje y socialización), y la aplicación del conocimiento?",valor_nan,0
+100,Procesos,Matriz de conocimiento,¿Conoce usted las matrices de conocimiento?,valor_1,14
+101,Procesos,Matriz de conocimiento,¿Conoce usted las matrices de conocimiento?,valor_2,0
+102,Procesos,Matriz de conocimiento,¿Conoce usted las matrices de conocimiento?,valor_3,0
+103,Procesos,Matriz de conocimiento,¿Conoce usted las matrices de conocimiento?,valor_4,0
+104,Procesos,Matriz de conocimiento,¿Conoce usted las matrices de conocimiento?,valor_5,11
+169,Procesos,Matriz de conocimiento,¿Conoce usted las matrices de conocimiento?,valor_nan,0
+105,Procesos,Matriz de conocimiento,¿Cuán efectivo considera el uso de las matrices de conocimiento estratégico en la organización?,valor_1,0
+106,Procesos,Matriz de conocimiento,¿Cuán efectivo considera el uso de las matrices de conocimiento estratégico en la organización?,valor_2,2
+107,Procesos,Matriz de conocimiento,¿Cuán efectivo considera el uso de las matrices de conocimiento estratégico en la organización?,valor_3,4
+108,Procesos,Matriz de conocimiento,¿Cuán efectivo considera el uso de las matrices de conocimiento estratégico en la organización?,valor_4,5
+109,Procesos,Matriz de conocimiento,¿Cuán efectivo considera el uso de las matrices de conocimiento estratégico en la organización?,valor_5,0
+150,Procesos,Matriz de conocimiento,¿Cuán efectivo considera el uso de las matrices de conocimiento estratégico en la organización?,valor_nan,14
+110,Procesos,Procesos,¿Conoces los procesos de la gestión del conocimiento implementados en la organización?,valor_1,7
+111,Procesos,Procesos,¿Conoces los procesos de la gestión del conocimiento implementados en la organización?,valor_2,0
+112,Procesos,Procesos,¿Conoces los procesos de la gestión del conocimiento implementados en la organización?,valor_3,0
+113,Procesos,Procesos,¿Conoces los procesos de la gestión del conocimiento implementados en la organización?,valor_4,0
+114,Procesos,Procesos,¿Conoces los procesos de la gestión del conocimiento implementados en la organización?,valor_5,18
+170,Procesos,Procesos,¿Conoces los procesos de la gestión del conocimiento implementados en la organización?,valor_nan,0
+115,Procesos,Procesos,¿Cuánto considera que los procesos implementados para la gestión del conocimiento contribuyen a mejorar la productividad de los colaboradores?,valor_1,0
+116,Procesos,Procesos,¿Cuánto considera que los procesos implementados para la gestión del conocimiento contribuyen a mejorar la productividad de los colaboradores?,valor_2,2
+117,Procesos,Procesos,¿Cuánto considera que los procesos implementados para la gestión del conocimiento contribuyen a mejorar la productividad de los colaboradores?,valor_3,8
+118,Procesos,Procesos,¿Cuánto considera que los procesos implementados para la gestión del conocimiento contribuyen a mejorar la productividad de los colaboradores?,valor_4,7
+119,Procesos,Procesos,¿Cuánto considera que los procesos implementados para la gestión del conocimiento contribuyen a mejorar la productividad de los colaboradores?,valor_5,1
+151,Procesos,Procesos,¿Cuánto considera que los procesos implementados para la gestión del conocimiento contribuyen a mejorar la productividad de los colaboradores?,valor_nan,7
+120,Procesos,Roles,"¿Cuánto considera que los colaboradores conocen, han asumido y realizan los roles definidos por la organización para la gestión del conocimiento?",valor_1,0
+121,Procesos,Roles,"¿Cuánto considera que los colaboradores conocen, han asumido y realizan los roles definidos por la organización para la gestión del conocimiento?",valor_2,1
+122,Procesos,Roles,"¿Cuánto considera que los colaboradores conocen, han asumido y realizan los roles definidos por la organización para la gestión del conocimiento?",valor_3,10
+123,Procesos,Roles,"¿Cuánto considera que los colaboradores conocen, han asumido y realizan los roles definidos por la organización para la gestión del conocimiento?",valor_4,2
+124,Procesos,Roles,"¿Cuánto considera que los colaboradores conocen, han asumido y realizan los roles definidos por la organización para la gestión del conocimiento?",valor_5,0
+152,Procesos,Roles,"¿Cuánto considera que los colaboradores conocen, han asumido y realizan los roles definidos por la organización para la gestión del conocimiento?",valor_nan,12
+125,Procesos,Roles,"¿La organización ha definido, formalizado, documentado (a través de manuales o con la descripción de trabajo) y comunicado los roles necesarios para la gestión del conocimiento dentro de la organización?",valor_1,12
+126,Procesos,Roles,"¿La organización ha definido, formalizado, documentado (a través de manuales o con la descripción de trabajo) y comunicado los roles necesarios para la gestión del conocimiento dentro de la organización?",valor_2,0
+127,Procesos,Roles,"¿La organización ha definido, formalizado, documentado (a través de manuales o con la descripción de trabajo) y comunicado los roles necesarios para la gestión del conocimiento dentro de la organización?",valor_3,0
+128,Procesos,Roles,"¿La organización ha definido, formalizado, documentado (a través de manuales o con la descripción de trabajo) y comunicado los roles necesarios para la gestión del conocimiento dentro de la organización?",valor_4,0
+129,Procesos,Roles,"¿La organización ha definido, formalizado, documentado (a través de manuales o con la descripción de trabajo) y comunicado los roles necesarios para la gestión del conocimiento dentro de la organización?",valor_5,13
+171,Procesos,Roles,"¿La organización ha definido, formalizado, documentado (a través de manuales o con la descripción de trabajo) y comunicado los roles necesarios para la gestión del conocimiento dentro de la organización?",valor_nan,0
+130,Tecnologia,Tipo de tecnologia,¿Considera que la organización ha implementado herramientas tecnológicas necesarias para la gestión del conocimiento?,valor_1,10
+131,Tecnologia,Tipo de tecnologia,¿Considera que la organización ha implementado herramientas tecnológicas necesarias para la gestión del conocimiento?,valor_2,0
+132,Tecnologia,Tipo de tecnologia,¿Considera que la organización ha implementado herramientas tecnológicas necesarias para la gestión del conocimiento?,valor_3,0
+133,Tecnologia,Tipo de tecnologia,¿Considera que la organización ha implementado herramientas tecnológicas necesarias para la gestión del conocimiento?,valor_4,0
+134,Tecnologia,Tipo de tecnologia,¿Considera que la organización ha implementado herramientas tecnológicas necesarias para la gestión del conocimiento?,valor_5,15
+172,Tecnologia,Tipo de tecnologia,¿Considera que la organización ha implementado herramientas tecnológicas necesarias para la gestión del conocimiento?,valor_nan,0
+135,Tecnologia,Tipo de tecnologia,"¿Cuán efectivas considera que son las herramientas tecnológicas (Viva Engage, Sharepoint y Outlook) para la gestión del conocimiento en la organización?",valor_1,0
+136,Tecnologia,Tipo de tecnologia,"¿Cuán efectivas considera que son las herramientas tecnológicas (Viva Engage, Sharepoint y Outlook) para la gestión del conocimiento en la organización?",valor_2,5
+137,Tecnologia,Tipo de tecnologia,"¿Cuán efectivas considera que son las herramientas tecnológicas (Viva Engage, Sharepoint y Outlook) para la gestión del conocimiento en la organización?",valor_3,4
+138,Tecnologia,Tipo de tecnologia,"¿Cuán efectivas considera que son las herramientas tecnológicas (Viva Engage, Sharepoint y Outlook) para la gestión del conocimiento en la organización?",valor_4,5
+139,Tecnologia,Tipo de tecnologia,"¿Cuán efectivas considera que son las herramientas tecnológicas (Viva Engage, Sharepoint y Outlook) para la gestión del conocimiento en la organización?",valor_5,1
+153,Tecnologia,Tipo de tecnologia,"¿Cuán efectivas considera que son las herramientas tecnológicas (Viva Engage, Sharepoint y Outlook) para la gestión del conocimiento en la organización?",valor_nan,10
+140,Tecnologia,Uso de tecnologia,"¿Cuán de acuerdo está con esa afirmación: ""La capacitación brindada a los colaboradores sobre las herramientas tecnológicas ha sido óptima""?",valor_1,0
+141,Tecnologia,Uso de tecnologia,"¿Cuán de acuerdo está con esa afirmación: ""La capacitación brindada a los colaboradores sobre las herramientas tecnológicas ha sido óptima""?",valor_2,4
+142,Tecnologia,Uso de tecnologia,"¿Cuán de acuerdo está con esa afirmación: ""La capacitación brindada a los colaboradores sobre las herramientas tecnológicas ha sido óptima""?",valor_3,12
+143,Tecnologia,Uso de tecnologia,"¿Cuán de acuerdo está con esa afirmación: ""La capacitación brindada a los colaboradores sobre las herramientas tecnológicas ha sido óptima""?",valor_4,8
+144,Tecnologia,Uso de tecnologia,"¿Cuán de acuerdo está con esa afirmación: ""La capacitación brindada a los colaboradores sobre las herramientas tecnológicas ha sido óptima""?",valor_5,1
+173,Tecnologia,Uso de tecnologia,"¿Cuán de acuerdo está con esa afirmación: ""La capacitación brindada a los colaboradores sobre las herramientas tecnológicas ha sido óptima""?",valor_nan,0
