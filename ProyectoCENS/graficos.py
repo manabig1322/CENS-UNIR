@@ -6,6 +6,41 @@ import seaborn as sns
 import numpy as np
 from math import pi
 from utils import dividir_titulo
+import plotly.express as px
+import os
+
+# graficar radar chart de dimensión directivos vs miembros
+def generar_grafico_radar(df, nombre_archivo, theta, color = None):
+    fig = px.line_polar(df, 
+                        r = "Valor",
+                        theta = theta,
+                        line_close = True,
+                        color = color,
+                        text= "Valor",
+                        template= "none"
+                        )
+
+    # Personalizar el eje radial
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[1, 5],
+                dtick=1  # separación entre líneas
+            )
+        )
+    )
+
+    fig.update_layout(
+            legend_title_text=''
+    )
+
+    fig.update_traces(fill='toself',            # Opcional: rellena el área
+        textposition='top left')  # opcional, para rellenar el área
+    fig.show()
+    ruta_salida = "plots3/"
+    ruta_completa = os.path.join(ruta_salida, f"{nombre_archivo}.png")
+    #fig.write_image(ruta_completa, width=800, height=600)
 
 def graficar_por_categoria(df, colores_por_anio=None):
     if colores_por_anio is None:
@@ -80,12 +115,12 @@ def graficar_por_categoria(df, colores_por_anio=None):
             fig.subplots_adjust(left=0.05, right=0.7, top=0.9, bottom=0.2)
             plt.show()
 
-def generar_graficas_componentes_total(df):
-    
-    dimensiones = df['Dimension'].unique()
 
-    # Colores personalizables para subdimensiones
-   # colores_subdimensiones = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2']
+
+
+
+def generar_graficas_componentes_total(df):
+    dimensiones = df['Dimension'].unique()
 
     for dimension in dimensiones:
         subset = df[df['Dimension'] == dimension]
@@ -96,15 +131,15 @@ def generar_graficas_componentes_total(df):
             # Gráfica de Radar
             num_vars = len(subdimensiones)
             angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
-            angles += angles[:1]  # Cerrar círculo
+            angles += angles[:1]  # Cierra el círculo
 
             valores_cerrado = valores + valores[:1]
 
             fig, ax = plt.subplots(figsize=(10, 8), subplot_kw=dict(polar=True))
 
-            # Dibujar los valores
+            # Dibujar los valores reales con polígono cerrado
             ax.plot(angles, valores_cerrado, linewidth=2, linestyle='solid', color='#1f77b4')
-            ax.fill(angles, valores_cerrado, alpha=0.1, color='#1f77b4')
+            ax.fill(angles, valores_cerrado, alpha=0.2, color='#1f77b4')  # Ahora sí rellena bien
 
             ax.set_theta_offset(np.pi / 2)
             ax.set_theta_direction(-1)
@@ -117,18 +152,19 @@ def generar_graficas_componentes_total(df):
             for angle, valor in zip(angles[:-1], valores):
                 ax.text(angle, valor + 0.1, f"{valor:.2f}", ha='center', va='bottom', fontsize=9, color='black')
 
-            # Ajustar escala con enteros
+            # Ajustar escala: eje radial comienza en 1
             max_val = max(valores)
-            ax.set_rgrids(range(1, int(np.ceil(max_val)) + 1))
+            max_r = np.ceil(max_val)
+            ax.set_ylim(1, max_r + 1)
+            ax.set_rgrids(range(1, int(max_r) + 1))
 
             # Título
             plt.suptitle(f'Dimensión: {dimension}', fontsize=16, y=0.95)
 
-            # Construir la leyenda manualmente
+            # Leyenda
             leyenda_texto = ""
             for idx, (sub, val) in enumerate(zip(subdimensiones, valores)):
-                #color = colores_subdimensiones[idx % len(colores_subdimensiones)]
-                leyenda_texto += f"{idx+1}: {sub} ({val:.2f})\n"
+                leyenda_texto += f"{sub} \n"
 
             # Agregar la leyenda como texto a la derecha
             plt.text(1.2, 0.5, leyenda_texto, transform=ax.transAxes,
@@ -154,11 +190,11 @@ def generar_graficas_componentes_total(df):
             for container in ax.containers:
                 ax.bar_label(container, fmt='%.2f', label_type='edge', padding=8)
 
-            # Ajustar espacio para los valores
             ax.margins(y=0.2)
             ax.set_title(f'Dimensión: {dimension}', size=16, pad=20)
             plt.subplots_adjust(top=0.85, bottom=0.2)
             plt.show()
+
 
 
 def GenerarGraficaPorPregunta(df, ExcelOrgien):
@@ -441,62 +477,50 @@ def GenerarGraficaRadarDimensiones(df_promedio_dimension):
 def generar_grafica_radar_total(df_promedio, Columna, Valor):
     # Asignar números a las dimensiones
     dimensiones = df_promedio[Columna].unique()
-    dimension_dict = {dim: i+1 for i, dim in enumerate(dimensiones)}  # Asigna un número a cada dimensión
+    dimension_dict = {dim: i+1 for i, dim in enumerate(dimensiones)}
 
-    # Reemplazar las dimensiones por números
     df_promedio['dimension_num'] = df_promedio[Columna].map(dimension_dict)
-    
-    # Definir los colores personalizados para las dimensiones
+
     colores_personalizados = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
 
-    # Número de variables (dimensiones)
     num_vars = len(dimensiones)
     angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
-    angles += angles[:1]  # Cerrar el círculo
+    angles += angles[:1]
 
-    # Valores para la gráfica (promedio por dimensión)
     valores = df_promedio[Valor].tolist()
-    valores += valores[:1]  # Cerrar el círculo
+    valores += valores[:1]
 
-    # Determinar el valor máximo y ajustar la escala
     max_valor = max(valores)
-    scale_max = np.ceil(max_valor)  # Redondear hacia el siguiente entero
-    scale_max = int(scale_max + 2)  # Asegurarse de que el valor máximo sea el valor más alto + 2
-    ticks = np.arange(0, scale_max, 1)  # Establecer las marcas de la escala solo con enteros
+    scale_max = np.ceil(max_valor) + 1  # Puedes ajustar el margen extra si quieres más espacio
+    ticks = np.arange(1, scale_max + 1, 1)  # Comienza desde 1
 
-    # Crear la figura de radar
     fig, ax = plt.subplots(figsize=(8, 6), subplot_kw=dict(polar=True))
 
-    # Dibujar cada dimensión con su color respectivo
     for i, dim in enumerate(dimensiones):
-        color = colores_personalizados[i % len(colores_personalizados)]  # Asegurar que se asignen colores de forma cíclica
-        valores_dim = [df_promedio[df_promedio[Columna] == dim][Valor].values[0]] * (num_vars + 1)  # Repetir el valor para cerrar el círculo
+        color = colores_personalizados[i % len(colores_personalizados)]
+        valor_promedio = df_promedio[df_promedio[Columna] == dim][Valor].values[0]
+        valores_dim = [valor_promedio] * (num_vars + 1)
         ax.plot(angles, valores_dim, linewidth=2, linestyle='solid', label=f'{dimension_dict[dim]}: {dim}', color=color)
         ax.fill(angles, valores_dim, alpha=0.1, color=color)
 
-        # Agregar el valor en la punta de la gráfica
-        valor_promedio = df_promedio[df_promedio[Columna] == dim][Valor].values[0]
-        ax.text(angles[i], valores[i], f'{valor_promedio:.2f}', horizontalalignment='center', verticalalignment='bottom', fontsize=10, color=color)
+        angle = angles[i]
+        ax.text(angle, valor_promedio + 0.2, f'{valor_promedio:.2f}', 
+                ha='center', va='center', fontsize=10, color=color)
 
-    # Ajustar los ejes
+    # Ajustes del gráfico polar
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
-
-    # Etiquetas con números en lugar de nombres de dimensiones
     ax.set_thetagrids(np.degrees(angles[:-1]), [str(dimension_dict[dim]) for dim in dimensiones])
+    ax.set_rlabel_position(45)
 
-    # Establecer la escala en los ejes radiales
-    ax.set_rlabel_position(0)  # Mover las etiquetas radiales
-    ax.set_rticks(ticks)  # Establecer las marcas de la escala solo con enteros
+    # Escala radial personalizada desde 1
+    ax.set_rticks(ticks)
+    ax.set_ylim(1, scale_max)  # Limita el inicio del eje radial a 1
 
-    # Título
     ax.set_title('Prom. Total Dimensión', size=16, pad=20)
-
-    # Leyenda con los números, dimensiones y valores asociados, movida a la derecha y centrada
-    leyenda_dimensiones = [f"{i+1}: {dim}" for i, dim in enumerate(dimensiones)]
+    leyenda_dimensiones = [f"{dim}" for i, dim in enumerate(dimensiones)]
     ax.legend(leyenda_dimensiones, loc='center left', bbox_to_anchor=(1.1, 0.5), fontsize=10, title="Dimensiones")
 
-    # Ajustar el layout para evitar que la leyenda se sobreponga
     plt.tight_layout()
     plt.show()
 

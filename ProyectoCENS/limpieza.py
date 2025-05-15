@@ -66,17 +66,34 @@ def LimpiezaDatos(df_2025Directivos,df_2025PreguntasDirectivo):
         '3. Dimensión de los Procesos de Gestión del Conocimiento':'3. Procesos',
         '4. Dimensión de la Tecnología':'4. Tecnologia',
         '2. Dimensión Humana':'2. Humana',
-        '1. Dimensión de la Estrategía y Dirección':'1. Estrategia y direccion'}
+        '1. Dimensión de la Estrategía y Dirección':'1. Estrategia y direccion',
+        '1. Estrategia y dirección':'1. Estrategia y direccion',
+        '4. Tecnología':'4. Tecnologia',
+        '5. Dimensión de Indicadores':'5. Indicadores'}
 
 
     #creando diccionario para reemplazar los nombres de las componente por su nombre corto de componente en el dataset
     diccionario_componente = {
-        '1.2 Plan estratégico':'1.2 Plan estrategico',
-        '1.3 Definición del Gestión del Conocimiento en la organización':'1.3 Definicion de gestion del conocimiento',
-        '2.5 Motivación e incentivos':'2.5 Motivacion',
-        '3.1 Matriz de conocimiento estratégico': '3.1 Matriz de conocimiento',
-        '4.1 Tipo de tecnología' :'4.1 Tipo de tecnologia',
-        '4.2 Uso de tecnología':'4.2 Uso de tecnologia'
+        '1.1 Responsable':'1. Responsable',
+        '1.2 Plan estratégico':'2. Plan estratégico',
+        '1.3 Definición del Gestión del Conocimiento en la organización':'3. Definición de gestión del conocimiento',
+        '1.4 Presupuesto':'4. Presupuesto',
+        '2.1 Liderazgo': '1. Liderazgo',
+        '2.2 Cultura' :'2. Cultura',
+        '2.3 Comunidades de conocimiento':'3. Comunidades de Conocimiento',
+        '2.4 Redes de conocimiento':'4. Redes de Conocimiento',
+        '2.5 Motivación e incentivos':'5. Motivación',
+        '3.1 Matriz de conocimiento estratégico':'1. Matriz de conocimiento',
+        '3.2 Ciclos de conversión':'2. Ciclos de conversión',
+        '2. Ciclos de Conversión':'2. Ciclos de conversión',
+        '3.3 Procesos de gestión del conocimiento':'3. Procesos',
+        '3.4 Roles':'4. Roles',
+        '4.1 Tipo de tecnología':'1. Uso de tecnología',
+        '4.2 Uso de tecnología':'2. Tipo de tecnología',
+        '5.1 Indicadores operativos':'1. Operativos',
+        '5.2 Indicadores de generación de valor':'2. Valor'
+
+
 
         }
     

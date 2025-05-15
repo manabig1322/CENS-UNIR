@@ -1,8 +1,8 @@
 import pandas as pd
 from limpieza import LimpiezaDatos
-from calculos import CalcularPromedioDimension, CalculosPromediosComponenteDataSet,calcularPromedioTotalComponente#,calcularPromedioTotalDimension#,calcularPromedioTotalComponente,calcularPromedioTotalCategoria,
-from utils import AgregarComponenteFaltantes, AgregarConteoPreguntasSeleccionMultiple, AgregarConteoPreguntasLikert #, AgregarCategoria2025
-from graficos import generar_graficas_componentes_total,generar_grafica_radar_total, GenerarGraficaComponente, GenerarGraficaPorPreguntaLikert,GenerarGraficaPorPregunta,GenerarGraficaRadarDimensiones #,graficar_por_categoria
+from calculos import CalcularPromedioDimension, CalculosPromediosComponenteDataSet,calcularPromedioTotalComponente, promedio_dimension#,calcularPromedioTotalDimension#,calcularPromedioTotalComponente,calcularPromedioTotalCategoria,
+from utils import AgregarComponenteFaltantes, AgregarConteoPreguntasSeleccionMultiple#, AgregarConteoPreguntasLikert #, AgregarCategoria2025
+from graficos import generar_grafico_radar, generar_graficas_componentes_total,generar_grafica_radar_total, GenerarGraficaComponente, GenerarGraficaPorPreguntaLikert,GenerarGraficaPorPregunta,GenerarGraficaRadarDimensiones #,graficar_por_categoria
 
 
 def main():
@@ -19,6 +19,12 @@ def main():
 
     df_2025Directivos,df_2025PreguntasDirectivo = LimpiezaDatos(df_2025Directivos,df_2025PreguntasDirectivo)
     
+    df_ListadoPreguntasLikertDirectiva2025 =  df_2025Directivos[df_2025Directivos['TipoPregunta'].isin(['Likert', 'Texto'])] #AgregarConteoPreguntasLikert(df_2025Directivos)
+    df_promedio_dimension_total_2025 = promedio_dimension(df_ListadoPreguntasLikertDirectiva2025)
+    df_promedio_dimension_total_2025['Valor'] = df_promedio_dimension_total_2025['Valor'].astype(float).round(1)
+    
+    generar_grafica_radar_total(df_promedio_dimension_total_2025,'Dimension','Valor')
+    generar_grafico_radar(df_promedio_dimension_total_2025,'Dimension','Valor')
     
     
     
@@ -34,7 +40,7 @@ def main():
     df_ListadoPreguntasEstructuradaDirectiva2025 =  AgregarConteoPreguntasSeleccionMultiple(df_2025Directivos,"Dimension","Subdimension","Pregunta","TipoPregunta","Valor")
    # df_ListadoPreguntasEstructuradaMiembro2025 =  AgregarConteoPreguntasSeleccionMultiple(df_2025Miembros,"Dimension","Subdimension","Pregunta","TipoPregunta","Valor")
     
-    df_ListadoPreguntasLikertDirectiva2025 = AgregarConteoPreguntasLikert(df_2025Directivos)
+    
     #df_ListadoPreguntasLikertMiembro2025 = AgregarConteoPreguntasLikert(df_2025Miembros)
   #  df_2025PreguntasDirectivo.to_csv("df_2025PreguntasDirectivo.csv")
    # df_ListadoPreguntasLikertDirectiva2025.to_csv("df_ListadoPreguntasLikertDirectiva2025.csv")
