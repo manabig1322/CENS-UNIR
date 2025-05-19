@@ -454,7 +454,7 @@ def GenerarGraficaRadarDimensiones(df_promedio_dimension):
     fig.subplots_adjust(left=0.05, right=0.7, top=0.9, bottom=0.2)
 
       # Mostrar número y nombre de cada dimensión, sin el promedio
-    lines = [f"{i+1}: {dim}" for i, dim in enumerate(labels_real)]
+    lines = [f"{dim}" for i, dim in enumerate(labels_real)]
     texto_dim = "\n".join(lines)
     
     plt.figtext(
@@ -473,53 +473,48 @@ def GenerarGraficaRadarDimensiones(df_promedio_dimension):
     plt.show()
 
 
-
 def generar_grafica_radar_total(df_promedio, Columna, Valor):
-    # Asignar números a las dimensiones
-    dimensiones = df_promedio[Columna].unique()
-    dimension_dict = {dim: i+1 for i, dim in enumerate(dimensiones)}
-
-    df_promedio['dimension_num'] = df_promedio[Columna].map(dimension_dict)
-
-    colores_personalizados = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+    # Extraer dimensiones y valores en orden
+    dimensiones = df_promedio[Columna].tolist()
+    valores = df_promedio[Valor].tolist()
 
     num_vars = len(dimensiones)
+
+    # Crear ángulos equidistantes para cada dimensión
     angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
-    angles += angles[:1]
+    angles += angles[:1]         # cerrar el polígono
+    valores += valores[:1]       # cerrar el polígono
 
-    valores = df_promedio[Valor].tolist()
-    valores += valores[:1]
-
+    # Escala del radar
     max_valor = max(valores)
-    scale_max = np.ceil(max_valor) + 1  # Puedes ajustar el margen extra si quieres más espacio
-    ticks = np.arange(1, scale_max + 1, 1)  # Comienza desde 1
+    scale_max = np.ceil(max_valor) + 1
+    ticks = list(range(1, int(scale_max) + 1))
 
+    # Crear figura y eje polar
     fig, ax = plt.subplots(figsize=(8, 6), subplot_kw=dict(polar=True))
 
-    for i, dim in enumerate(dimensiones):
-        color = colores_personalizados[i % len(colores_personalizados)]
-        valor_promedio = df_promedio[df_promedio[Columna] == dim][Valor].values[0]
-        valores_dim = [valor_promedio] * (num_vars + 1)
-        ax.plot(angles, valores_dim, linewidth=2, linestyle='solid', label=f'{dimension_dict[dim]}: {dim}', color=color)
-        ax.fill(angles, valores_dim, alpha=0.1, color=color)
+    # Dibujar el polígono y rellenarlo
+    color = '#1f77b4'
+    ax.plot(angles, valores, linewidth=2, linestyle='solid', color=color)
+    ax.fill(angles, valores, alpha=0.3, color=color)
 
+    # Añadir etiquetas de valor en cada punta
+    for i, valor in enumerate(valores[:-1]):
         angle = angles[i]
-        ax.text(angle, valor_promedio + 0.2, f'{valor_promedio:.2f}', 
-                ha='center', va='center', fontsize=10, color=color)
+        ax.text(angle, valor + 0.2, f'{valor:.1f}', ha='center', va='center', fontsize=10, color=color)
 
-    # Ajustes del gráfico polar
+    # Configurar el eje polar
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
-    ax.set_thetagrids(np.degrees(angles[:-1]), [str(dimension_dict[dim]) for dim in dimensiones])
-    ax.set_rlabel_position(45)
+    ax.set_thetagrids(np.degrees(angles[:-1]), [f" {dim}" for i, dim in enumerate(dimensiones)])
 
-    # Escala radial personalizada desde 1
-    ax.set_rticks(ticks)
-    ax.set_ylim(1, scale_max)  # Limita el inicio del eje radial a 1
+    # Escala radial desde 1, sin mostrar el 0
+    ax.set_ylim(1, scale_max)
+    ax.set_yticks(ticks[1:])  # omitir el 0
+    ax.set_yticklabels([str(t) for t in ticks[1:]])
+    ax.set_rlabel_position(90)  #  Aquí se rota la escala radial a 45°
 
-    ax.set_title('Prom. Total Dimensión', size=16, pad=20)
-    leyenda_dimensiones = [f"{dim}" for i, dim in enumerate(dimensiones)]
-    ax.legend(leyenda_dimensiones, loc='center left', bbox_to_anchor=(1.1, 0.5), fontsize=10, title="Dimensiones")
+    ax.set_title('Prom. Total por Dimensión', size=16, pad=20)
 
     plt.tight_layout()
     plt.show()
